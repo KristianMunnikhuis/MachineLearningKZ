@@ -50,7 +50,8 @@ snap_steps = [int(round((t - t0) / dt)) for t in snap_times]
 assert all(1 <= j <= len(t_hist) - 1 for j in snap_steps), "snapshot time outside run"
 
 # ---- initial state ----
-rng   = np.random.default_rng()
+seed = np.random.SeedSequence().entropy     # random each run
+rng  = np.random.default_rng(seed)
 shape = (N_PER_CHUNK, kz2.N, kz2.N)
 phi   = np.zeros(shape)
 pi    = np.zeros(shape)
@@ -77,7 +78,7 @@ np.savez(tmpfile,
          snap_times=np.array(snap_times),      # (33,)
          phi_final=phi.astype(np.float32),     # (50, N, N)
          wall_len=kz2.wall_length(phi),        # (50,)
-         seed=chunk_id, dt=dt, tau=kz2.TAU, N=kz2.N)
+         seed=seed, dt=dt, tau=kz2.TAU, N=kz2.N)
 
 os.replace(tmpfile, outfile)
 print("saved:", outfile)
