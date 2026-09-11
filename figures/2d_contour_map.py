@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../")
-import KZ_2D as kz
+import src.KZ_2D as kz
 import matplotlib.pyplot as plt
 import numpy as np
 

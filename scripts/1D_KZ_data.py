@@ -17,7 +17,7 @@ Output: data/kz_tau{TAU}.npz
 """
 import argparse, os, time
 import numpy as np
-import KZ as kz
+import src.KZ as kz
 
 # ---- parameters ----
 kz.DOF, kz.dx      = 1024, 0.5

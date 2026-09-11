@@ -39,7 +39,7 @@ def epsilon(t, t0, t1):
     s = (t - t0)/(t1 - t0)
     return EPS_I + (EPS_F - EPS_I)*s
 
-
+ 
 # ---- model ----
 def laplacian(phi):
     return (np.roll(phi, 1, axis=-1) - 2*phi + np.roll(phi, -1, axis=-1))/dx/dx

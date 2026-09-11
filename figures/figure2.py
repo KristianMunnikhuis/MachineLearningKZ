@@ -4,7 +4,7 @@ Paper: arXiv:2508.20347, Fig. 2.  tau_Q = 128.
 """
 import numpy as np
 import matplotlib.pyplot as plt
-import KZ as kz
+import src.KZ as kz
 
 # ---- parameters ----
 kz.DOF, kz.dx      = 1024, 0.5
