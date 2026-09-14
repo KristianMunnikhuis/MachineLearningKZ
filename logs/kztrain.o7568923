@@ -1,2 +1,358 @@
 === tau=128  t=-64.0 ===
 device: cuda
+data/2D_tau128: 3000 samples, using t = -64
+baseline test accuracy: 0.4998
+epoch  0  train 0.4958  val 0.5289  (3s)  *saved
+epoch  1  train 0.5051  val 0.4632  (2s)
+epoch  2  train 0.4948  val 0.5378  (2s)  *saved
+epoch  3  train 0.5031  val 0.4778  (2s)
+epoch  4  train 0.4948  val 0.5378  (2s)  *saved
+epoch  5  train 0.5052  val 0.4622  (2s)
+epoch  6  train 0.5052  val 0.4622  (2s)
+epoch  7  train 0.5052  val 0.4622  (2s)
+epoch  8  train 0.5035  val 0.4765  (2s)
+epoch  9  train 0.5029  val 0.4805  (2s)
+epoch 10  train 0.4949  val 0.5373  (2s)
+epoch 11  train 0.4958  val 0.5301  (2s)
+epoch 12  train 0.4948  val 0.5378  (2s)
+epoch 13  train 0.5051  val 0.4624  (2s)
+epoch 14  train 0.5052  val 0.4622  (2s)
+epoch 15  train 0.5052  val 0.4622  (2s)
+epoch 16  train 0.5052  val 0.4622  (2s)
+epoch 17  train 0.5052  val 0.4622  (2s)
+epoch 18  train 0.4948  val 0.5378  (2s)
+epoch 19  train 0.4974  val 0.5196  (2s)
+epoch 20  train 0.5052  val 0.4622  (2s)
+epoch 21  train 0.5052  val 0.4622  (2s)
+epoch 22  train 0.5052  val 0.4622  (2s)
+epoch 23  train 0.5052  val 0.4622  (2s)
+epoch 24  train 0.5052  val 0.4622  (2s)
+epoch 25  train 0.5052  val 0.4622  (2s)
+epoch 26  train 0.5052  val 0.4622  (2s)
+epoch 27  train 0.5052  val 0.4622  (2s)
+epoch 28  train 0.5052  val 0.4622  (2s)
+epoch 29  train 0.5052  val 0.4622  (2s)
+test 0.4849  baseline 0.4998  error cut -3.0%
+=== tau=128  t=-32.0 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = -32
+baseline test accuracy: 0.5039
+epoch  0  train 0.5052  val 0.4622  (3s)  *saved
+epoch  1  train 0.5052  val 0.4622  (2s)
+epoch  2  train 0.5051  val 0.4624  (2s)  *saved
+epoch  3  train 0.5052  val 0.4719  (2s)  *saved
+epoch  4  train 0.5052  val 0.4622  (2s)
+epoch  5  train 0.5051  val 0.4623  (2s)
+epoch  6  train 0.5051  val 0.4625  (2s)
+epoch  7  train 0.5052  val 0.4743  (2s)  *saved
+epoch  8  train 0.5051  val 0.4624  (2s)
+epoch  9  train 0.5051  val 0.4623  (2s)
+epoch 10  train 0.5051  val 0.4623  (2s)
+epoch 11  train 0.5052  val 0.4622  (2s)
+epoch 12  train 0.5051  val 0.4631  (2s)
+epoch 13  train 0.5052  val 0.4671  (2s)
+epoch 14  train 0.5052  val 0.4622  (2s)
+epoch 15  train 0.5052  val 0.4622  (2s)
+epoch 16  train 0.5052  val 0.4622  (2s)
+epoch 17  train 0.5052  val 0.4622  (2s)
+epoch 18  train 0.5052  val 0.4622  (2s)
+epoch 19  train 0.5053  val 0.4776  (2s)  *saved
+epoch 20  train 0.5052  val 0.4622  (2s)
+epoch 21  train 0.5052  val 0.4666  (2s)
+epoch 22  train 0.5051  val 0.4625  (2s)
+epoch 23  train 0.5052  val 0.4622  (2s)
+epoch 24  train 0.5052  val 0.4622  (2s)
+epoch 25  train 0.5052  val 0.4622  (2s)
+epoch 26  train 0.5052  val 0.4622  (2s)
+epoch 27  train 0.5052  val 0.4622  (2s)
+epoch 28  train 0.5052  val 0.4622  (2s)
+epoch 29  train 0.5052  val 0.4622  (2s)
+test 0.5138  baseline 0.5039  error cut 2.0%
+=== tau=128  t=0 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 0
+baseline test accuracy: 0.5497
+epoch  0  train 0.6694  val 0.6723  (3s)  *saved
+epoch  1  train 0.6232  val 0.5862  (2s)
+epoch  2  train 0.7098  val 0.7013  (2s)  *saved
+epoch  3  train 0.6242  val 0.6497  (2s)
+epoch  4  train 0.7182  val 0.7049  (2s)  *saved
+epoch  5  train 0.7124  val 0.6935  (2s)
+epoch  6  train 0.7229  val 0.7048  (2s)
+epoch  7  train 0.7241  val 0.7100  (2s)  *saved
+epoch  8  train 0.7254  val 0.7040  (2s)
+epoch  9  train 0.7203  val 0.6924  (2s)
+epoch 10  train 0.7067  val 0.6738  (2s)
+epoch 11  train 0.7210  val 0.7120  (2s)  *saved
+epoch 12  train 0.7261  val 0.7020  (2s)
+epoch 13  train 0.7263  val 0.7126  (2s)  *saved
+epoch 14  train 0.7151  val 0.7105  (2s)
+epoch 15  train 0.7254  val 0.7124  (2s)
+epoch 16  train 0.6776  val 0.6376  (2s)
+epoch 17  train 0.7293  val 0.7098  (2s)
+epoch 18  train 0.7075  val 0.7081  (2s)
+epoch 19  train 0.7241  val 0.7125  (2s)
+epoch 20  train 0.6959  val 0.7022  (2s)
+epoch 21  train 0.7257  val 0.6954  (2s)
+epoch 22  train 0.7278  val 0.6987  (2s)
+epoch 23  train 0.7228  val 0.6908  (2s)
+epoch 24  train 0.7276  val 0.6964  (2s)
+epoch 25  train 0.7176  val 0.6844  (2s)
+epoch 26  train 0.7278  val 0.7129  (2s)  *saved
+epoch 27  train 0.7317  val 0.7018  (2s)
+epoch 28  train 0.7343  val 0.7120  (2s)
+epoch 29  train 0.7281  val 0.6914  (2s)
+test 0.7130  baseline 0.5497  error cut 36.2%
+=== tau=128  t=12.8 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 12.8
+baseline test accuracy: 0.6030
+epoch  0  train 0.7415  val 0.7209  (3s)  *saved
+epoch  1  train 0.8343  val 0.8418  (2s)  *saved
+epoch  2  train 0.8417  val 0.8403  (2s)
+epoch  3  train 0.8262  val 0.8422  (2s)  *saved
+epoch  4  train 0.8545  val 0.8609  (2s)  *saved
+epoch  5  train 0.8470  val 0.8587  (2s)
+epoch  6  train 0.8442  val 0.8556  (2s)
+epoch  7  train 0.8572  val 0.8645  (2s)  *saved
+epoch  8  train 0.8564  val 0.8659  (2s)  *saved
+epoch  9  train 0.8506  val 0.8506  (2s)
+epoch 10  train 0.8465  val 0.8446  (2s)
+epoch 11  train 0.8351  val 0.8288  (2s)
+epoch 12  train 0.8568  val 0.8600  (2s)
+epoch 13  train 0.8559  val 0.8576  (2s)
+epoch 14  train 0.8374  val 0.8315  (2s)
+epoch 15  train 0.8599  val 0.8659  (2s)
+epoch 16  train 0.8549  val 0.8649  (2s)
+epoch 17  train 0.8454  val 0.8569  (2s)
+epoch 18  train 0.8531  val 0.8522  (2s)
+epoch 19  train 0.8567  val 0.8578  (2s)
+epoch 20  train 0.8599  val 0.8621  (2s)
+epoch 21  train 0.8248  val 0.8410  (2s)
+epoch 22  train 0.8540  val 0.8524  (2s)
+epoch 23  train 0.8610  val 0.8660  (2s)  *saved
+epoch 24  train 0.8620  val 0.8631  (2s)
+epoch 25  train 0.8626  val 0.8667  (2s)  *saved
+epoch 26  train 0.8631  val 0.8642  (2s)
+epoch 27  train 0.8578  val 0.8551  (2s)
+epoch 28  train 0.8574  val 0.8625  (2s)
+epoch 29  train 0.8576  val 0.8620  (2s)
+test 0.8508  baseline 0.6030  error cut 62.4%
+=== tau=128  t=25.6 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 25.6
+baseline test accuracy: 0.6960
+epoch  0  train 0.9007  val 0.9042  (3s)  *saved
+epoch  1  train 0.9191  val 0.9195  (2s)  *saved
+epoch  2  train 0.9228  val 0.9278  (2s)  *saved
+epoch  3  train 0.9314  val 0.9341  (2s)  *saved
+epoch  4  train 0.8923  val 0.8923  (2s)
+epoch  5  train 0.9337  val 0.9392  (2s)  *saved
+epoch  6  train 0.9399  val 0.9450  (2s)  *saved
+epoch  7  train 0.9392  val 0.9442  (2s)
+epoch  8  train 0.9408  val 0.9454  (2s)  *saved
+epoch  9  train 0.9438  val 0.9490  (2s)  *saved
+epoch 10  train 0.9426  val 0.9471  (2s)
+epoch 11  train 0.9443  val 0.9495  (2s)  *saved
+epoch 12  train 0.9379  val 0.9426  (2s)
+epoch 13  train 0.9476  val 0.9527  (2s)  *saved
+epoch 14  train 0.9457  val 0.9504  (2s)
+epoch 15  train 0.9460  val 0.9502  (2s)
+epoch 16  train 0.9480  val 0.9521  (2s)
+epoch 17  train 0.9459  val 0.9498  (2s)
+epoch 18  train 0.9371  val 0.9412  (2s)
+epoch 19  train 0.9387  val 0.9429  (2s)
+epoch 20  train 0.9445  val 0.9484  (2s)
+epoch 21  train 0.9462  val 0.9502  (2s)
+epoch 22  train 0.9492  val 0.9533  (2s)  *saved
+epoch 23  train 0.9496  val 0.9533  (2s)  *saved
+epoch 24  train 0.9463  val 0.9497  (2s)
+epoch 25  train 0.9493  val 0.9531  (2s)
+epoch 26  train 0.9473  val 0.9502  (2s)
+epoch 27  train 0.9499  val 0.9533  (2s)
+epoch 28  train 0.9499  val 0.9544  (2s)  *saved
+epoch 29  train 0.9398  val 0.9433  (2s)
+test 0.9426  baseline 0.6960  error cut 81.1%
+=== tau=128  t=38.4 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 38.4
+baseline test accuracy: 0.8071
+epoch  0  train 0.9465  val 0.9471  (3s)  *saved
+epoch  1  train 0.9592  val 0.9607  (2s)  *saved
+epoch  2  train 0.9566  val 0.9592  (2s)
+epoch  3  train 0.9658  val 0.9662  (2s)  *saved
+epoch  4  train 0.9763  val 0.9774  (2s)  *saved
+epoch  5  train 0.9703  val 0.9712  (2s)
+epoch  6  train 0.9696  val 0.9707  (2s)
+epoch  7  train 0.9684  val 0.9697  (2s)
+epoch  8  train 0.9779  val 0.9789  (2s)  *saved
+epoch  9  train 0.9745  val 0.9752  (2s)
+epoch 10  train 0.9834  val 0.9842  (2s)  *saved
+epoch 11  train 0.9796  val 0.9803  (2s)
+epoch 12  train 0.9779  val 0.9784  (2s)
+epoch 13  train 0.9723  val 0.9733  (2s)
+epoch 14  train 0.9836  val 0.9846  (2s)  *saved
+epoch 15  train 0.9808  val 0.9812  (2s)
+epoch 16  train 0.9831  val 0.9832  (2s)
+epoch 17  train 0.9836  val 0.9843  (2s)
+epoch 18  train 0.9819  val 0.9819  (2s)
+epoch 19  train 0.9831  val 0.9834  (2s)
+epoch 20  train 0.9860  val 0.9860  (2s)  *saved
+epoch 21  train 0.9820  val 0.9821  (2s)
+epoch 22  train 0.9855  val 0.9856  (2s)
+epoch 23  train 0.9844  val 0.9841  (2s)
+epoch 24  train 0.9844  val 0.9843  (2s)
+epoch 25  train 0.9789  val 0.9796  (2s)
+epoch 26  train 0.9866  val 0.9861  (2s)  *saved
+epoch 27  train 0.9828  val 0.9824  (2s)
+epoch 28  train 0.9857  val 0.9856  (2s)
+epoch 29  train 0.9867  val 0.9862  (2s)  *saved
+test 0.9846  baseline 0.8071  error cut 92.0%
+=== tau=128  t=51.2 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 51.2
+baseline test accuracy: 0.8655
+epoch  0  train 0.9257  val 0.9212  (3s)  *saved
+epoch  1  train 0.9696  val 0.9691  (2s)  *saved
+epoch  2  train 0.9763  val 0.9762  (2s)  *saved
+epoch  3  train 0.9781  val 0.9786  (2s)  *saved
+epoch  4  train 0.9717  val 0.9724  (2s)
+epoch  5  train 0.9874  val 0.9874  (2s)  *saved
+epoch  6  train 0.9895  val 0.9894  (2s)  *saved
+epoch  7  train 0.9767  val 0.9775  (2s)
+epoch  8  train 0.9798  val 0.9805  (2s)
+epoch  9  train 0.9884  val 0.9882  (2s)
+epoch 10  train 0.9886  val 0.9886  (2s)
+epoch 11  train 0.9903  val 0.9905  (2s)  *saved
+epoch 12  train 0.9911  val 0.9914  (2s)  *saved
+epoch 13  train 0.9922  val 0.9924  (2s)  *saved
+epoch 14  train 0.9917  val 0.9920  (2s)
+epoch 15  train 0.9859  val 0.9856  (2s)
+epoch 16  train 0.9934  val 0.9933  (2s)  *saved
+epoch 17  train 0.9897  val 0.9901  (2s)
+epoch 18  train 0.9800  val 0.9804  (2s)
+epoch 19  train 0.9937  val 0.9935  (2s)  *saved
+epoch 20  train 0.9940  val 0.9937  (2s)  *saved
+epoch 21  train 0.9919  val 0.9916  (2s)
+epoch 22  train 0.9904  val 0.9905  (2s)
+epoch 23  train 0.9940  val 0.9938  (2s)  *saved
+epoch 24  train 0.9935  val 0.9936  (2s)
+epoch 25  train 0.9927  val 0.9924  (2s)
+epoch 26  train 0.9871  val 0.9876  (2s)
+epoch 27  train 0.9849  val 0.9853  (2s)
+epoch 28  train 0.9950  val 0.9947  (2s)  *saved
+epoch 29  train 0.9950  val 0.9947  (2s)  *saved
+test 0.9944  baseline 0.8655  error cut 95.8%
+=== tau=128  t=64.0 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 64
+baseline test accuracy: 0.8983
+epoch  0  train 0.9692  val 0.9701  (3s)  *saved
+epoch  1  train 0.9736  val 0.9736  (2s)  *saved
+epoch  2  train 0.9828  val 0.9831  (2s)  *saved
+epoch  3  train 0.9871  val 0.9870  (2s)  *saved
+epoch  4  train 0.9870  val 0.9871  (2s)  *saved
+epoch  5  train 0.9824  val 0.9830  (2s)
+epoch  6  train 0.9925  val 0.9923  (2s)  *saved
+epoch  7  train 0.9903  val 0.9905  (2s)
+epoch  8  train 0.9902  val 0.9898  (2s)
+epoch  9  train 0.9928  val 0.9926  (2s)  *saved
+epoch 10  train 0.9916  val 0.9918  (2s)
+epoch 11  train 0.9948  val 0.9943  (2s)  *saved
+epoch 12  train 0.9946  val 0.9947  (2s)  *saved
+epoch 13  train 0.9878  val 0.9883  (2s)
+epoch 14  train 0.9955  val 0.9953  (2s)  *saved
+epoch 15  train 0.9953  val 0.9948  (2s)
+epoch 16  train 0.9947  val 0.9940  (2s)
+epoch 17  train 0.9958  val 0.9954  (2s)  *saved
+epoch 18  train 0.9955  val 0.9953  (2s)
+epoch 19  train 0.9873  val 0.9863  (2s)
+epoch 20  train 0.9930  val 0.9922  (2s)
+epoch 21  train 0.9909  val 0.9912  (2s)
+epoch 22  train 0.9946  val 0.9939  (2s)
+epoch 23  train 0.9815  val 0.9808  (2s)
+epoch 24  train 0.9965  val 0.9961  (2s)  *saved
+epoch 25  train 0.9964  val 0.9962  (2s)  *saved
+epoch 26  train 0.9860  val 0.9866  (2s)
+epoch 27  train 0.9952  val 0.9953  (2s)
+epoch 28  train 0.9967  val 0.9962  (2s)  *saved
+epoch 29  train 0.9964  val 0.9962  (2s)  *saved
+test 0.9960  baseline 0.8983  error cut 96.0%
+=== tau=128  t=96.0 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 96
+baseline test accuracy: 0.9528
+epoch  0  train 0.9879  val 0.9889  (3s)  *saved
+epoch  1  train 0.9878  val 0.9880  (2s)
+epoch  2  train 0.9926  val 0.9929  (2s)  *saved
+epoch  3  train 0.9962  val 0.9962  (2s)  *saved
+epoch  4  train 0.9968  val 0.9967  (2s)  *saved
+epoch  5  train 0.9909  val 0.9909  (2s)
+epoch  6  train 0.9963  val 0.9964  (2s)
+epoch  7  train 0.9942  val 0.9942  (2s)
+epoch  8  train 0.9969  val 0.9971  (2s)  *saved
+epoch  9  train 0.9949  val 0.9953  (2s)
+epoch 10  train 0.9936  val 0.9940  (2s)
+epoch 11  train 0.9962  val 0.9962  (2s)
+epoch 12  train 0.9985  val 0.9986  (2s)  *saved
+epoch 13  train 0.9986  val 0.9986  (2s)  *saved
+epoch 14  train 0.9963  val 0.9965  (2s)
+epoch 15  train 0.9986  val 0.9986  (2s)
+epoch 16  train 0.9985  val 0.9985  (2s)
+epoch 17  train 0.9978  val 0.9979  (2s)
+epoch 18  train 0.9989  val 0.9988  (2s)  *saved
+epoch 19  train 0.9988  val 0.9988  (2s)
+epoch 20  train 0.9977  val 0.9977  (2s)
+epoch 21  train 0.9976  val 0.9976  (2s)
+epoch 22  train 0.9990  val 0.9990  (2s)  *saved
+epoch 23  train 0.9976  val 0.9976  (2s)
+epoch 24  train 0.9984  val 0.9983  (2s)
+epoch 25  train 0.9986  val 0.9986  (2s)
+epoch 26  train 0.9964  val 0.9964  (2s)
+epoch 27  train 0.9991  val 0.9990  (2s)  *saved
+epoch 28  train 0.9989  val 0.9988  (2s)
+epoch 29  train 0.9981  val 0.9981  (2s)
+test 0.9990  baseline 0.9528  error cut 97.8%
+=== tau=128  t=128.0 ===
+device: cuda
+data/2D_tau128: 3000 samples, using t = 128
+baseline test accuracy: 1.0000
+epoch  0  train 0.9976  val 0.9977  (3s)  *saved
+epoch  1  train 0.9989  val 0.9989  (2s)  *saved
+epoch  2  train 0.9988  val 0.9988  (2s)
+epoch  3  train 0.9992  val 0.9992  (2s)  *saved
+epoch  4  train 0.9996  val 0.9996  (2s)  *saved
+epoch  5  train 0.9998  val 0.9998  (2s)  *saved
+epoch  6  train 0.9997  val 0.9997  (2s)
+epoch  7  train 0.9995  val 0.9995  (2s)
+epoch  8  train 0.9997  val 0.9997  (2s)
+epoch  9  train 0.9997  val 0.9997  (2s)
+epoch 10  train 0.9998  val 0.9998  (2s)  *saved
+epoch 11  train 0.9998  val 0.9998  (2s)
+epoch 12  train 0.9989  val 0.9989  (2s)
+epoch 13  train 0.9997  val 0.9997  (2s)
+epoch 14  train 0.9998  val 0.9998  (2s)
+epoch 15  train 0.9998  val 0.9998  (2s)  *saved
+epoch 16  train 0.9995  val 0.9995  (2s)
+epoch 17  train 0.9997  val 0.9997  (2s)
+epoch 18  train 0.9996  val 0.9996  (2s)
+epoch 19  train 0.9997  val 0.9997  (2s)
+epoch 20  train 0.9998  val 0.9998  (2s)
+epoch 21  train 0.9996  val 0.9995  (2s)
+epoch 22  train 0.9999  val 0.9999  (2s)  *saved
+epoch 23  train 0.9996  val 0.9996  (2s)
+epoch 24  train 0.9997  val 0.9997  (2s)
+epoch 25  train 0.9994  val 0.9994  (2s)
+epoch 26  train 0.9998  val 0.9998  (2s)
+epoch 27  train 0.9998  val 0.9998  (2s)
+epoch 28  train 0.9999  val 0.9999  (2s)  *saved
+epoch 29  train 0.9996  val 0.9996  (2s)
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/projectnb/fheating/kmunnik/MachineLearningKZ/scripts/train.py", line 72, in <module>
+    main()
+  File "/projectnb/fheating/kmunnik/MachineLearningKZ/scripts/train.py", line 60, in main
+    error_cut=1 - (1 - test_acc) / (1 - baseline),
+                  ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+ZeroDivisionError: float division by zero
