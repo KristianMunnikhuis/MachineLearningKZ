@@ -9,3 +9,5 @@ data/
 *.pt
 *.ckpt
 .venv/
+logs/
+results/*.pt
