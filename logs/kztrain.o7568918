@@ -1,0 +1,4 @@
+=== tau=64  t=-32.0 ===
+device: cuda
+data/2D_tau64: 3000 samples, using t = -32
+baseline test accuracy: 0.4989
