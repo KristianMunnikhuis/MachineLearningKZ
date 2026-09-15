@@ -1,2 +1,4 @@
 start: Mon Sep 14 11:43:09 EDT 2026   tau=256
 tau=256.0  steps=6400  dt=0.1000  t: -384.0 .. 256.0
+saved: data/2D_tau256/chunk_059.npz
+end:   Mon Sep 14 12:29:58 EDT 2026
