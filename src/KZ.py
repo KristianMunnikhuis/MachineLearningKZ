@@ -1,22 +1,29 @@
 """1+1D Landau-Ginzburg Langevin solver.
 
+
+Equations of Motion of the phi_4 field:
+
     phi_tt + eta*phi_t - phi_xx + dV/dphi = noise
     V(phi) = (phi^4 - 2*eps*phi^2)/8
     <noise(x,t) noise(x',t')> = 2*eta*theta*delta(x-x')*delta(t-t')
 
-eps ramps linearly from EPS_I to EPS_F over the time grid you pass to run().
+eps ramps linearly from EPS_I to EPS_F over the time grid.
 
-Usage:
+Example Usage:
     import kz
+    #Set Tau value
     kz.TAU = 256.0
+    #Set Time Grid
     t_hist, dt = kz.make_time_grid()
+    #Run simulation
     phi_hist, pi_hist = kz.run(t_hist, dt, seed=0)
+    #Produce a heatmap 
     kz.heatmap(phi_hist, t_hist)
 """
 import numpy as np
 import matplotlib.pyplot as plt
 
-# ---- parameters ----
+# ---- Default parameters ----
 DOF   = 1024      # grid points
 dx    = 0.5       # lattice spacing
 eta   = 1.0       # damping
@@ -42,15 +49,20 @@ def epsilon(t, t0, t1):
  
 # ---- model ----
 def laplacian(phi):
+    #Numerical Laplacian
     return (np.roll(phi, 1, axis=-1) - 2*phi + np.roll(phi, -1, axis=-1))/dx/dx
 
 def partial_V(phi, eps):
+    #Matching form of potential in KZ paper
     return 0.5*(phi**3 - eps*phi)
 
 def deriv(phi, pi, eps):
+    # Explicitly setting \dot_\phi = \pi 
+    # \dot_\pi comes from EOM 
     return pi, -eta*pi + laplacian(phi) - partial_V(phi, eps)
 
 def rk4_step(phi, pi, t, dt, t0, t1):
+    #Runge Kutta numerical integration step.
     e0 = epsilon(t,        t0, t1)
     eh = epsilon(t + dt/2, t0, t1)
     e1 = epsilon(t + dt,   t0, t1)
@@ -70,12 +82,15 @@ def run(t_hist, dt, n_real=None, seed=None, stride=1, phi0=None, pi0=None):
     phi0   : scalar or array initial condition (default 0)
     stride : store every stride-th step
     """
+    #Use random seed to simulate thermal noise
     rng = np.random.default_rng(seed)
+    #n_real sets number of indepednent runs
     shape = (DOF,) if n_real is None else (n_real, DOF)
     t0, t1 = t_hist[0], t_hist[-1]
-
+    #Preparing Data
     phi = np.zeros(shape) if phi0 is None else np.broadcast_to(np.asarray(phi0, float), shape).copy()
     pi  = np.zeros(shape) if pi0  is None else np.broadcast_to(np.asarray(pi0,  float), shape).copy()
+    #Thermal Noise amplitude 
     amp = np.sqrt(2*eta*theta*dt/dx)
 
     keep = np.arange(0, len(t_hist), stride)
@@ -84,14 +99,18 @@ def run(t_hist, dt, n_real=None, seed=None, stride=1, phi0=None, pi0=None):
     phi_hist[0], pi_hist[0] = phi, pi
 
     j = 1
+    #Integration step
     for n, t in enumerate(t_hist[:-1]):
+        #Evolve States
         phi, pi = rk4_step(phi, pi, t, dt, t0, t1)
         if theta > 0:
+            #If Temperature positive, add noise
             pi += amp*rng.standard_normal(shape)
         if (n+1) % stride == 0 and j < len(keep):
+            #Append
             phi_hist[j], pi_hist[j] = phi, pi
             j += 1
-
+    #Return 
     return phi_hist, pi_hist
 
 
@@ -107,10 +126,12 @@ def ic_domains(eps, n_kinks=8):
 
 # ---- diagnostics ----
 def count_defects(phi):
+    #Counts defects as areas where \phi switches signs
     s = np.sign(phi)
     return np.sum(s != np.roll(s, -1, axis=-1), axis=-1)
 
 def defect_positions(phi):
+    #Calculates positions of defects for visualization
     p, q = phi, np.roll(phi, -1)
     i = np.nonzero(np.sign(p) != np.sign(q))[0]
     return (i + p[i]/(p[i] - q[i]))*dx
