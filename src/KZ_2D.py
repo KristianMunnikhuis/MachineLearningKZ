@@ -131,6 +131,7 @@ def wall_length(phi):
 def wall_mask(phi):
     """Boolean array marking sites adjacent to a sign flip. Single snapshot."""
     s = np.sign(phi)
+    
     return ((s != np.roll(s, -1, axis=-1)) | (s != np.roll(s, 1, axis=-1)) |
             (s != np.roll(s, -1, axis=-2)) | (s != np.roll(s, 1, axis=-2)))
 
