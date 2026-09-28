@@ -1,9 +1,9 @@
-"""Stage 2: generate and store the training data.
+"""Generate and store the training data for the 1d model.
 
 For each tau_Q, runs N_SAMPLES independent noise realizations and stores the
-snapshot history at Delta t = 1 (float32), plus the final configuration.
-Windows for any sampling time t are sliced out of the history afterwards, so
-the four sampling times of Fig. 4 need no extra storage.
+snapshot history at integer tiemsteps and saves the final configuration.
+
+Example usage:
 
     python generate_data.py                 # all tau_Q, paper defaults
     python generate_data.py 128             # one tau_Q
@@ -15,9 +15,11 @@ Output: data/kz_tau{TAU}.npz
     phi_final (N, DOF)         float32   target, t = TAU (eps = 1)
     n_defects (N,)             int
 """
+import sys
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import argparse, os, time
 import numpy as np
-import src.KZ as kz
+import src.kz as kz
 
 # ---- parameters ----
 kz.DOF, kz.dx      = 1024, 0.5
@@ -26,10 +28,10 @@ kz.EPS_I, kz.EPS_F = -1.5, 1.0
 
 TAUS      = [128.0, 256.0, 512.0]
 N_SAMPLES = 3000
-DT        = 0.05      # RK4 step (unspecified in the paper - our choice)
-SNAP_DT   = 1.0       # snapshot spacing, set by the paper's input format
-BATCH     = 100       # realizations per vectorized pass (memory/speed knob)
-SEED0     = 880304
+DT        = 0.05      # RK4 step size
+SNAP_DT   = 1.0       # snapshot spacing
+BATCH     = 100       # realizations per pass
+SEED0     = 990304    # Initial Seed
 OUTDIR    = 'data'
 
 # only snapshots in this window are kept, to save space.
@@ -39,24 +41,31 @@ T_KEEP_MIN = -220.0
 
 def generate(TAU, n_samples=N_SAMPLES, dt=DT, batch=BATCH, seed0=SEED0,
              outdir=OUTDIR, verbose=True):
-    kz.TAU = float(TAU)
-    n_steps = int(round((kz.EPS_F - kz.EPS_I)*kz.TAU/dt))
-    t_hist, dt_actual = kz.make_time_grid(n_steps)
-    stride = max(1, int(round(SNAP_DT/dt_actual)))
+    #Set time
+    t0 = time.time()
 
+    #Set Tau
+    kz.TAU = float(TAU)
+    #calculate number of steps
+    n_steps = int(round((kz.EPS_F - kz.EPS_I)*kz.TAU/dt))
+    #Generaet time grid
+    t_hist, dt_actual = kz.make_time_grid(n_steps)
+    #Calculate stride
+    stride = max(1, int(round(SNAP_DT/dt_actual)))
+    #Pick times 
     ts_all = t_hist[::stride]
     keep   = ts_all >= T_KEEP_MIN
     ts     = ts_all[keep]
-
+    #Optional Print 
     if verbose:
         print(f'tau_Q={TAU:.0f}  dt={dt_actual:.4f}  n_steps={n_steps}  '
               f'stride={stride}  snapshots kept={keep.sum()}/{len(ts_all)}')
-
+    #Empty data array
     phi_hist = np.empty((n_samples, keep.sum(), kz.DOF), dtype=np.float32)
-    t0 = time.time()
 
     for b0 in range(0, n_samples, batch):
-        nb = min(batch, n_samples - b0)
+        nb = min(batch, n_samples - b0) #Only matters for last batch
+        #Generate snapshots for the run
         ph, _ = kz.run(t_hist, dt_actual, n_real=nb, seed=seed0 + b0,
                        stride=stride)
         # ph is (n_snap, nb, DOF) -> (nb, n_snap_kept, DOF)
@@ -68,7 +77,7 @@ def generate(TAU, n_samples=N_SAMPLES, dt=DT, batch=BATCH, seed0=SEED0,
 
     phi_final = phi_hist[:, -1, :]
     n_def = kz.count_defects(phi_final.astype(np.float64))
-
+    #Save Data
     os.makedirs(outdir, exist_ok=True)
     path = os.path.join(outdir, f'kz_tau{int(TAU)}.npz')
     np.savez_compressed(path, phi_hist=phi_hist, ts=ts, phi_final=phi_final,
@@ -98,7 +107,7 @@ def window(d, t_center, win=5):
                          f'[{ts[0]:.0f}, {ts[-1]:.0f}]')
     return d['phi_hist'][:, idx, :]
 
-
+#main loop
 if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('taus', nargs='*', type=float, default=TAUS)

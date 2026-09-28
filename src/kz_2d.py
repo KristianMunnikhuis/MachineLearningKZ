@@ -46,15 +46,17 @@ def epsilon(t, t0, t1):
 
 # ---- model ----
 def laplacian(phi):
-    """5-point stencil, periodic in both directions. Acts on the last two axes."""
+    """2d Laplacian"""
     return (np.roll(phi,  1, axis=-1) + np.roll(phi, -1, axis=-1) +
             np.roll(phi,  1, axis=-2) + np.roll(phi, -1, axis=-2) -
             4*phi)/dx/dx
 
 def partial_V(phi, eps):
+    """Compute Partial V"""
     return 0.5*(phi**3 - eps*phi)
 
 def deriv(phi, pi, eps):
+
     return pi, -eta*pi + laplacian(phi) - partial_V(phi, eps)
 
 def rk4_step(phi, pi, t, dt, t0, t1):
@@ -131,6 +133,7 @@ def wall_length(phi):
 def wall_mask(phi):
     """Boolean array marking sites adjacent to a sign flip. Single snapshot."""
     s = np.sign(phi)
+    
     return ((s != np.roll(s, -1, axis=-1)) | (s != np.roll(s, 1, axis=-1)) |
             (s != np.roll(s, -1, axis=-2)) | (s != np.roll(s, 1, axis=-2)))
 

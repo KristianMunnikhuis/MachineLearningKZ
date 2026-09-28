@@ -1,8 +1,9 @@
-"""Shared pieces for the 1D= KZ predictability experiments.
-Includes Neural Network used to predict KZ defects
+"""Shared pieces for the 2D KZ predictability experiments:
+data loading, U-Net model, training and evaluation.
+
 Import from a script or a notebook:
     import src.kz_ml as kzml
-    X, Y, t = kzml.load_data(tau=128, t_frac=0.5)
+    X, Y, t_used = kzml.load_data("data/2D_tau128", t_in=0.0)
 """
 import glob
 import os

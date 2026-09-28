@@ -14,7 +14,7 @@ import os
 import time
 
 import numpy as np
-import src.KZ_2D as kz2
+import src.kz_2d as kz2
 
 
 def parse_args():

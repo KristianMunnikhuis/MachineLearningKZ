@@ -11,7 +11,7 @@ If the output file already exists, it does nothing.
 import os
 import argparse
 import numpy as np
-import src.KZ_2D as kz2
+import src.kz_2d as kz2
 
 # ---- command line ----
 p = argparse.ArgumentParser()
@@ -63,13 +63,16 @@ snaps = np.zeros((N_PER_CHUNK, len(SNAP_TIMES), kz2.N, kz2.N), dtype=np.float32)
 step_to_slot = {j: i for i, j in enumerate(snap_steps)}
 
 # ---- time evolution ----
+"""We don't use kz2.run here because we are interested in saving only integer steps, this saves on memory 
+drastically.
+"""
 for step in range(1, len(t_hist)):
-    t = t_hist[step - 1]
-    phi, pi = kz2.rk4_step(phi, pi, t, dt, t0, t1)
-    pi += noise_amp * rng.standard_normal(shape)
+    t = t_hist[step - 1] #pull t value
+    phi, pi = kz2.rk4_step(phi, pi, t, dt, t0, t1) #rk4 step
+    pi += noise_amp * rng.standard_normal(shape) #noise step
 
     if step in step_to_slot:
-        snaps[:, step_to_slot[step]] = phi
+        snaps[:, step_to_slot[step]] = phi #save at snapshot times
 
 # ---- save (write to temp file, then rename, so a crash never leaves a half file) ----
 os.makedirs(OUTDIR, exist_ok=True)

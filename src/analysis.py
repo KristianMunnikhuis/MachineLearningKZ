@@ -1,4 +1,4 @@
-"""Analysis helpers for the KZ predictability experiments.
+"""Analysis helpers for the 2D KZ predictability experiments.
 
 Import in a notebook (from notebooks/):
     import sys; sys.path.insert(0, "..")
@@ -10,15 +10,13 @@ Import in a notebook (from notebooks/):
 import glob
 import json
 import os
-
 import numpy as np
 import torch
-
 import src.kz_ml as kzml
 
-RESULTS = "../results"
-DATA    = "../data"
-
+ROOT    = os.path.join(os.path.dirname(__file__), "..")
+RESULTS = os.path.join(ROOT, "results")
+DATA    = os.path.join(ROOT, "data")
 
 # ---------------------------------------------------------------- results
 
@@ -28,7 +26,8 @@ def load_results(tau, results_dir=RESULTS):
     Returns a list of dicts (the JSON contents, plus 'tag' and 'has_ckpt').
     """
     out = []
-    for f in sorted(glob.glob(os.path.join(results_dir, f"tau{int(tau)}_t*.json"))):
+    sorted_data=  sorted(glob.glob(os.path.join(results_dir, f"tau{int(tau)}_t*.json")))
+    for f in sorted_data:
         r = json.load(open(f))
         r["tag"] = f[:-5]
         r["has_ckpt"] = os.path.exists(f[:-5] + ".pt")
