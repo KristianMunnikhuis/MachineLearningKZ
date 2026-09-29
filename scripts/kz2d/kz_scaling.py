@@ -12,7 +12,7 @@ import numpy as np
 import src.kz_2d as kz2
 
 # ---- inputs ----
-TAUS    = [8, 16, 32, 64, 128, 256]
+TAUS = [8, 10, 13, 16, 20, 25, 32, 40, 51, 64, 81, 102, 128, 161, 203, 256]
 N       = 256
 N_REAL  = 10
 FRAC    = 0.5
