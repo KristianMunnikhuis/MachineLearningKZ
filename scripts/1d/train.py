@@ -9,9 +9,7 @@ Writes results/tau128_t50.json and results/tau128_t50.pt
 import argparse
 import json
 import os
-
 import torch
-
 import src.kz_ml as kzml
 
 
@@ -31,33 +29,34 @@ def parse_args():
 
 
 def main():
-    a = parse_args()
-    data_dir = a.data if a.data else f"data/2D_tau{int(a.tau)}"
-    os.makedirs(a.outdir, exist_ok=True)
 
-    tag  = f"tau{int(a.tau)}_t{a.t_in:g}"
-    ckpt = os.path.join(a.outdir, tag + ".pt")
+    a = parse_args() #training args
+    data_dir = a.data if a.data else f"data/2D_tau{int(a.tau)}" #load data
+    os.makedirs(a.outdir, exist_ok=True) #make output folders
 
-    print(f"device: {kzml.DEVICE}", flush=True)
+    tag  = f"tau{int(a.tau)}_t{a.t_in:g}" #Tag Data
+    ckpt = os.path.join(a.outdir, tag + ".pt") #Grab Checkpoints
 
-    X, Y, t_used = kzml.load_data(data_dir, a.t_in)
+    print(f"device: {kzml.DEVICE}", flush=True) #Print Device
+
+    X, Y, t_used = kzml.load_data(data_dir, a.t_in) #Load Data
     print(f"{data_dir}: {X.shape[0]} samples, using t = {t_used:g}", flush=True)
 
     train_loader, val_loader, test_loader, scale, baseline = kzml.make_loaders(
-        X, Y, batch_size=a.batch, seed=a.seed)
+        X, Y, batch_size=a.batch, seed=a.seed) # Check Baselines
     print(f"baseline test accuracy: {baseline:.4f}", flush=True)
 
-    model = kzml.UNet().to(kzml.DEVICE)
+    model = kzml.UNet().to(kzml.DEVICE) #Load NN 
     history, best_val = kzml.train(model, train_loader, val_loader,
-                                   epochs=a.epochs, lr=a.lr, ckpt=ckpt)
-
+                                   epochs=a.epochs, lr=a.lr, ckpt=ckpt) #Train (From checkpoint if available)
     # final number from the best checkpoint, on the untouched test set
     model.load_state_dict(torch.load(ckpt))
     test_loss, test_acc = kzml.evaluate(model, test_loader)
-
+    # fraction of the baseline's errors the model removes (nan if baseline is perfect)
+    error_cut = 1 - (1 - test_acc) / (1 - baseline) if baseline < 1 else float("nan")
     result = dict(tau=a.tau, t_in=a.t_in, t_used=t_used,
                   baseline=baseline, test_acc=test_acc, best_val=best_val,
-                  error_cut=1 - (1 - test_acc) / (1 - baseline),
+                  error_cut=error_cut,
                   epochs=a.epochs, lr=a.lr, batch=a.batch, seed=a.seed,
                   n_samples=int(X.shape[0]), scale=scale, history=history)
 
