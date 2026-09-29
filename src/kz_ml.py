@@ -22,13 +22,15 @@ LOSS_FN = nn.BCEWithLogitsLoss()
 
 # ---------------------------------------------------------------- data
 
-def load_data(data_dir, t_in):
-    """Build (input, target) pairs from 2D KZ quench chunks.
+def load_data(data_dir, t_hat_in, target="y_end"):
+    """Build (input, target) pairs from 2D KZ quench chunks (v2 data).
 
-    Input  X: field snapshot at the stored time nearest t_in, shape (n, N, N)
-    Target Y: final domain map, 1 where phi_final > 0 else 0, shape (n, N, N)
-    Also returns t_used, the snapshot time actually used.
-    Assumes all chunks share the same snap_times.
+    Input  X: field snapshot at the stored time nearest t_hat_in (units of t_hat), shape (n, N, N)
+    Target Y: sign map, 1 where phi > 0, shape (n, N, N)
+              target="y_end"  -> at the end of the run (coarsened)
+              target="y_form" -> at formation (KZ pattern)
+    Also returns t_used, the snapshot time actually used, in units of t_hat.
+    Assumes all chunks share the same snap_hat.
     """
     files = sorted(glob.glob(os.path.join(data_dir, "chunk_*.npz")))
     if not files:
@@ -38,15 +40,14 @@ def load_data(data_dir, t_in):
     for f in files:
         d = np.load(f)
         # index of stored snapshot closest to requested time
-        i = int(np.argmin(np.abs(d["snap_times"] - t_in)))
-        t_used = float(d["snap_times"][i])
-        X_list.append(d["snaps"][:, i])       # (runs, N, N) at t_used
-        Y_list.append(d["phi_final"] > 0)     # final sign = domain label
+        i = int(np.argmin(np.abs(d["snap_hat"] - t_hat_in)))
+        t_used = float(d["snap_hat"][i])
+        X_list.append(d["snaps"][:, i].astype(np.float32))   # stored as float16
+        Y_list.append(d[target])                              # bool sign map
 
-    X = np.concatenate(X_list).astype(np.float32)
+    X = np.concatenate(X_list)
     Y = np.concatenate(Y_list).astype(np.float32)
     return X, Y, t_used
-
 
 def make_loaders(X, Y, batch_size=32, seed=0):
     """Split 80/10/10 into train/val/test and wrap in DataLoaders.
