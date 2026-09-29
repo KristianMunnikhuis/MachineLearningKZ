@@ -22,7 +22,7 @@ Example Usage:
 """
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 # ---- Default parameters ----
 DOF   = 1024      # grid points
 dx    = 0.5       # lattice spacing
@@ -163,3 +163,21 @@ def heatmap(hist, t_hist, log=False, ax=None, cmap=None, label=r'$\phi$'):
     plt.colorbar(img, ax=ax, label=label)
     ax.set_xlabel('x'); ax.set_ylabel('t')
     return ax
+
+
+def load(TAU, outdir="data"):
+    """Load the 1D dataset for one tau."""
+    return np.load(os.path.join(outdir, f"kz_tau{int(TAU)}.npz"))
+
+
+def window(d, t_center, win=5):
+    """Input windows of 2*win+1 snapshots (spacing 1) centered at t_center.
+    Returns (N, 2*win+1, DOF)."""
+    ts = d["ts"]
+    j  = int(np.argmin(abs(ts - t_center)))
+    k  = int(round(1.0/(ts[1] - ts[0])))
+    idx = np.arange(j - win*k, j + win*k + 1, k)
+    if idx[0] < 0 or idx[-1] >= len(ts):
+        raise ValueError(f"t={t_center} window runs off the stored range "
+                         f"[{ts[0]:.0f}, {ts[-1]:.0f}]")
+    return d["phi_hist"][:, idx, :]

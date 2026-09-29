@@ -15,8 +15,7 @@ Output: data/kz_tau{TAU}.npz
     phi_final (N, DOF)         float32   target, t = TAU (eps = 1)
     n_defects (N,)             int
 """
-import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
 import argparse, os, time
 import numpy as np
 import src.kz as kz
