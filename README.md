@@ -1,6 +1,12 @@
-![KZ quench](figures/2d/kz_quench.gif)
 
-Using Machine Learning to predict Kibble Zurek domains 
+
+# Neural-Network Prediction of Defect Formation in Quenched $\phi^4$ models.
+
+<p align="center">
+  <img src="figures/2d/kz_quench.gif" width="700">
+  <br>
+  <em>2D quench at different quench times, shown at the same rescaled times t/t̂. Larger τ<sub>Q</sub> gives larger domains.</em>
+</p>
 
 1d- verified, from arkiv replication of Zurek(2025)
 

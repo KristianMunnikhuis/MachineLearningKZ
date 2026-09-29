@@ -15,19 +15,18 @@ import torch
 import src.kz_ml as kzml
 
 ROOT    = os.path.join(os.path.dirname(__file__), "..")
-RESULTS = os.path.join(ROOT, "results")
-DATA    = os.path.join(ROOT, "data")
-
+RESULTS = os.path.join(ROOT, "results", "v2")
+DATA    = os.path.join(ROOT, "data", "2D_v2")
 # ---------------------------------------------------------------- results
 
-def load_results(tau, results_dir=RESULTS):
-    """All finished runs for one tau, sorted by input time.
+
+def load_results(tau, target="y_end", results_dir=RESULTS):
+    """All finished runs for one tau and target, sorted by input time (units of t_hat).
 
     Returns a list of dicts (the JSON contents, plus 'tag' and 'has_ckpt').
     """
     out = []
-    sorted_data=  sorted(glob.glob(os.path.join(results_dir, f"tau{int(tau)}_t*.json")))
-    for f in sorted_data:
+    for f in glob.glob(os.path.join(results_dir, f"tau{int(tau)}_that*_{target}.json")):
         r = json.load(open(f))
         r["tag"] = f[:-5]
         r["has_ckpt"] = os.path.exists(f[:-5] + ".pt")
@@ -44,19 +43,18 @@ def as_arrays(res):
     return t, eb, em
 
 
-def t_star(res, tau, threshold=0.25):
-    """Input time at which the model error first drops below `threshold`.
+def t_star(res, threshold=0.25):
+    """Input time (units of t_hat) at which the model error first drops below `threshold`.
 
-    Linear interpolation between the bracketing points, in units of t/tau.
-    Returns np.nan if the curve never crosses.
+    Linear interpolation between the bracketing points. Returns np.nan if the curve never crosses.
     """
     t, _, em = as_arrays(res)
-    x = t / tau
     for i in range(len(em) - 1):
         if em[i] > threshold >= em[i+1]:
             f = (em[i] - threshold) / (em[i] - em[i+1])
-            return x[i] + f * (x[i+1] - x[i])
+            return t[i] + f * (t[i+1] - t[i])
     return np.nan
+
 
 
 # ---------------------------------------------------------------- models
@@ -78,16 +76,14 @@ def predict(model, X, scale):
 
 
 def load_chunk(tau, chunk=0, data_dir=DATA):
-    """One chunk of raw data for a given tau."""
-    return np.load(os.path.join(data_dir, f"2D_tau{int(tau)}",
-                                f"chunk_{chunk:03d}.npz"))
+    """One chunk of v2 data for a given tau."""
+    return np.load(os.path.join(data_dir, f"tau{int(tau)}", f"chunk_{chunk:03d}.npz"))
 
 
-def snapshot_at(d, t):
-    """The snapshot from chunk d nearest to time t, plus the time used."""
-    i = int(np.argmin(np.abs(d["snap_times"] - t)))
-    return d["snaps"][:, i], float(d["snap_times"][i])
-
+def snapshot_at(d, t_hat_in):
+    """The snapshot nearest t_hat_in (units of t_hat), as float32, plus the time used."""
+    i = int(np.argmin(np.abs(d["snap_hat"] - t_hat_in)))
+    return d["snaps"][:, i].astype(np.float32), float(d["snap_hat"][i])
 
 # ---------------------------------------------------------------- physics
 
@@ -146,25 +142,3 @@ def error_breakdown(pred, true, width=2):
         near.append((w & band).sum() / total)
         bulk.append((w & ~band).sum() / total)
     return np.array(near), np.array(bulk)
-
-def wall_length_stats(tau, res, chunk=0, data_dir=DATA):
-    """Wall-length bias and scatter for every trained input time.
-
-    Returns (t_used, offset_pct, scatter_pct) as arrays, in percent of the
-    mean true wall length.
-    """
-    d  = load_chunk(tau, chunk, data_dir)
-    wt = wall_length(d["phi_final"])
-
-    ts, off, sca = [], [], []
-    for r in res:
-        if not r["has_ckpt"]:
-            continue
-        model, meta = load_model(r["tag"])
-        X, t_used = snapshot_at(d, meta["t_used"])
-        wp = wall_length(predict(model, X, meta["scale"]))
-        diff = wp - wt
-        ts.append(t_used)
-        off.append(100 * diff.mean() / wt.mean())
-        sca.append(100 * diff.std()  / wt.mean())
-    return np.array(ts), np.array(off), np.array(sca)
