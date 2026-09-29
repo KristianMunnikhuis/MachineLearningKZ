@@ -2,24 +2,27 @@
 
 #$ -P fheating
 #$ -N kztrain
+#$ -l h_rt=00:45:00
 #$ -l gpus=1
-#$ -l gpu_c=7.0
-#$ -l h_rt=04:00:00
+#$ -l gpu_c=7.5
 #$ -pe omp 4
 #$ -j y
 #$ -o logs/
 #$ -cwd
 
+# One U-Net per array task; task i reads line i of GRID ("tau t_hat target").
+# Submit:  qsub -t 1-$(wc -l < jobs/train_grid_y_end.txt) -v GRID=jobs/train_grid_y_end.txt jobs/train.sh
+
 module load miniconda
 conda activate kz
 
-TAU=${TAU:-128}
+read TAU THAT TARGET <<< "$(sed -n "${SGE_TASK_ID}p" $GRID)"
 
-# input times to sweep, as fractions of tau
-FRACS="-0.5 -0.25 0 0.1 0.2 0.3 0.4 0.5 0.75 1.0"
+# skip runs that already finished (safe to resubmit)
+if [ -f "results/v2/tau${TAU}_that${THAT}_${TARGET}.json" ]; then
+  echo "already done: tau=$TAU t_hat=$THAT $TARGET"; exit 0
+fi
 
-for f in $FRACS; do
-    T=$(python -c "print($f * $TAU)")
-    echo "=== tau=$TAU  t=$T ===" 
-    python -u -m scripts.train --tau $TAU --t-in $T
-done
+echo "start: $(date)   tau=$TAU  t_hat=$THAT  target=$TARGET"
+python -u -m scripts.kz2d.train --tau $TAU --t-hat $THAT --target $TARGET
+echo "end:   $(date)"
