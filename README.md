@@ -1,3 +1,5 @@
+![KZ quench](figures/2d/kz_quench.gif)
+
 Using Machine Learning to predict Kibble Zurek domains 
 
 1d- verified, from arkiv replication of Zurek(2025)
