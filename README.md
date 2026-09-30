@@ -25,17 +25,40 @@ We begin by replicating results from [REFERENCE], then we extend beyond their wo
   <br>
   <em>The minimum of the "mexican hat potential" spontaneously takes on a non-zero value as the paramater $\epsilon(t)$ is varied.</em>
 </p>
-Phase transitions in physical systems are associated with a spontaneous symmetry breaking. For instance, consider the figure above. On the left, we see that the minimum of the curve in red is in the center. Now imagine we deform the curve as shown. Suddenly, there are now two minima in the function where previously there was only one. 
+Phase transitions in physical systems are associated with a spontaneous symmetry breaking. For instance, consider the figure above. On the left, we see that the minimum of the curve in red is in the center. Now imagine we deform the curve as shown in the diagram. We see that suddenly, there are now two minima in the function where previously there was only one. 
 
-Physical systems want to minimize their potential energies in a way that satisfy their kinematical constraints. That's a fancy way of saying that the ball prefers to sit in the minimum of the well. So when there are two degenerate minima, the ball simply has to pick one to fall in. Both divots lower the balls potential energy by the same amount, but *the fact that there is a choice at all for the ball* means the physics of the resulting situation is very different than when we had one minimum. 
+The red curve represents the potential energy of the ball. Physical systems want to minimize their potential energies in a way that satisfy their kinematical constraints. That's a fancy way of saying that the ball prefers to sit in the minimum of the well. So when there are two degenerate minima, the ball simply has to pick one to fall in. Both divots lower the balls potential energy by the same amount, but *the fact that there is a choice at all for the ball* means the physics of the resulting situation is very different than when we had one minimum. 
 
-The critical point of a system is the point at which symmetry is just about to be broken. At this point, the system becomes ultra-sensitive to thermal (for classical systems) fluctuations. The change in the value of the field at one point has immense influence on the strength of the field at a far away point. To describe this long range sensitivity, we say that the system's *correlation length* "diverges" at the critical point, in other words, we formally say its infinite. 
+The critical point of a system is the point at which symmetry is just about to be broken. At this point, the system becomes ultra-sensitive to thermal fluctuations (The situation is slightly different in quantum systems, which we do not consider here). The change in the value of the field at one point has immense influence on the strength of the field at a far away point. To describe this long range sensitivity, we say that the system's *correlation length* "diverges" at the critical point, in other words, we formally say its infinite. 
 
-Correlation length can be thought of as the length of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wati a period of time proportional to the size of the area being considered, in other words, in orderto wait for a thermodynamically large system to equilibriate at the critical point, you'd have to wait an infinite amount of time!
+Correlation length can be thought of as the size of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wait a period of time proportional to the size of the area being considered. This means that if our correlation length is infinite, then we need to wait an infinite amount of time for our system to equilibriate! 
 
-This implies that any finite speed phase transition-- in other words, you drive the system across the critical point in some time that doesn't take an inifnite amount of time-- is inherently a non-equilibrium process. This non-equilibrium behavior comes in the form of heat energy added in by your quench, and is observable in the post-quench field configuration as topological defects that raise the energy of the system above its ground state. 
+This implies that any finite speed phase transition (in other words, you drive the system across the critical point in some time that doesn't take an inifnite amount of time) is inherently a non-equilibrium process. Physically, heat energy is injected into the system by the finite speed quench. This heat is observable in the post-quench field configuration as topological defects that raise the energy of the system above its ground state. 
 
 The density of these topological defects famously follows a power law, $\xi\propto v^k$, where $v$ is the velocity of the quench and $k$ is some real number. Knowing the value of $k$ is very important for physcisists, as one can relate it to the scaling epxonents of a system. In other words, measuring $k$ in this non-equilibrium experiment gives us access to an equilibrium scaling exponent.
+
+We study a $\phi^4$ model with the following lagrangian:
+
+$$\mathcal{L}=\frac{1}{2}\dot \phi -\frac{1}{2}(\nabla \phi)^2-V(\phi)$$
+
+with 
+
+$$V(\phi)=\frac{1}{8}(\phi^4-\epsilon(t)\phi ^2)
+
+$$
+
+Noise and temperature require an outisde bath, which is modeled through a langevin extension to hte equation sof motion:
+
+$$\ddot \phi + \eta \dot \phi - \nabla^2 \phi +V'(\phi)=\zeta(r,t)$$
+
+Where $\zeta$ is our noise kernel satisfying:
+
+$$\langle \zeta(r,t) \zeta(r',t') \rangle =2\eta \theta \delta^d(r-r')\delta(t-t')$$
+
+The parameter of interest here is $\epsilon(t)$, which controls whether or not $V(\phi$) has one or two minima (In fact, $V(\phi)$ is exactly the mexican hat potential in the image above!)
+
+We choose $\epsilon(t)=t/\tau$, so that if we run an experiment for instance from $t=-3\tau \to 10\tau$ we are varying $\epsilon$ from -3 to 10 at a constant velocity $v=1/\tau$.
+
 
 
 
