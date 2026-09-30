@@ -9,7 +9,7 @@ __pycache__/
 data/
 logs/
 *.o[0-9]*
-results/*.pt
+*.pt
 *.npz
 
 # Personal notes
