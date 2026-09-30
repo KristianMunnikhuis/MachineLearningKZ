@@ -15,7 +15,7 @@ We begin by replicating results from [REFERENCE], then we extend beyond their wo
 
 # Background
 <p align="center">
-  <img src="SSB.png" width="700">
+  <img src="figures/repo_fig/SSB.png" width="700">
   <br>
   <em>The minimum of the "mexican hat potential" spontaneously takes on a non-zero value as the paramater $\epsilon(t)$ is varied.</em>
 </p>
