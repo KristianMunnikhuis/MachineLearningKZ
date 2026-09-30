@@ -60,16 +60,69 @@ The parameter of interest here is $\epsilon(t)$, which controls whether or not $
 We choose $\epsilon(t)=t/\tau$, so that if we run an experiment for instance from $t=-3\tau \to 10\tau$ we are varying $\epsilon$ from -3 to 10 at a constant velocity $v=1/\tau$.
 
 
+This picture is quite general. In this repository we consider the case of one and two dimension seperately. In two dimensions, we can also have coarsening dynamics, where regions of phase set by the kibble zurek dynamics, but then after this formation they can move, shrink, or grow. Oftentimes, anything that goes byeond mean-defect density is considered "beyond KZ physics". In this case, we aim to predict the entire field configuration, which is definitely beyond KZ physics!
+
+
+
+# Results
+### 1D replication study
+
+We aim initially to replicate the results of [REFERENCE]. We simulate the dynamics of the system in one dimenison and train a Recurrent-Neural-Network to take in a snapshot of the field and predict the final field configuration.
+
+<p align="center">
+  <img src="figures/1d/figure1.png" width="700">
+  <br>
+  <em>Top: The real time evolution of the one dimensional field $\phi$ for a specific noise realization. Regions of positivity and negativity are evidence of the KZ dynamcis. These regions grow increasingly polarized as the minimum depth $\propto \sqrt{\epsilon}$ is increased. Bottom: The finial field configuration for this trajectory, with defects counted as zero-crossings of the field. The job of our RNN is to predict hte bottom plot given the top plot.</em>
+</p>
+
+
+
+You can train the model yourself, using `notebook.01_1d_replication.ipynb`. If you do, you'll find a result similar to this:
+
+
+<p align="center">
+  <img src="figures/1d/Predicted_Final_1d.png" width="700">
+  <br>
+  <em>The (normalized) field input in blue, the true final field in black, and our RNN's prediction of the final field in Red. As we can see, the model is not only capable of learning the final number of defects, but is also capable of predicting defect location!</em>
+</p>
 
 
 
 
 
 
+<p align="center">
+  <img src="figures/1d/defect_location_prediction.png" width="700">
+  <br>
+  <em>Location of defects versus the prediction by the model</em>
+</p>
+
+In direct comparison with some of the figures in [Reference], we find that we replicate their results to a sufficient level of satisfaction. For instance, observe the training/validation curves we recover to the ones reported by them.
+
+<p align="center">
+  <img src="figures/1d/final_t_validation_curves.png" width="48%">
+  <img src="figures/repo_fig/Paper_compare.png" width="48%">
+  <br>
+  <em>Left: Our result Right: [REFERENCE] result.</em>
+</p>
+
+#### Going Beyond the paper
+
+Before continuing onto the two dimensional case, we first ask (as we will ask throughout this project): What is the model really learning? 
+
+To help answer this question, we apply a low-pass filter to the inputs before asking our model to predict the final field values. KZ physics tells us that length scales less than $\xi_{KZ}$ (and hence, momentum modes larger than $k=\frac{1}{\xi_{KZ}}$) should be irrelevant to the final field configuration.
+
+In applying a low pass filter, we are selecting to keep only momentum modes $k\in [0,k_c]$ where $k_c$ is a cutoff frequency.
 
 
+We find that for $k_c\le \frac{1}{\xi_{KZ}}$, validation error greatly increases, but for $k_c\ge\frac{1}{\xi_{KZ}}$ is flat! The RNN is only learning features on the scale of the Kibble-Zurek length!
 
 
+<p align="center">
+  <img src="figures/1d/lowpass_training.png" width="700">
+  <br>
+  <em>Validation errors against $k_c$cutoff frequency. </em>
+</p>
 
 
 
