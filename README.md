@@ -10,8 +10,14 @@
 
 Second order phase transitions are caused by the breaking of some symmetry in a physical system. The dynamics that govern a system that is driven through a second order phase transition at some finite speed is known as *Kibble-Zurek physics*. Kibble-Zurek physics predicts that as the system is driven in this non-equilibrium process, the symmetry in a system is broken in different ways across the system. In this repository we explore how one can use machine learning to gain a deeper insight of this non-equilibrium process. 
 
-We begin by replicating results from [REFERENCE], then we extend beyond their work to produce new results in the 2D case. 
+Recently work has been done on trying to understand the non-equilibrium dynamics that form these domains. A work led by ____ [REFERENCE] studied the KZ effect in one dimension, finding that deep within the "freezout" regime there exists enough information to intuit the final domain pattern. 
 
+We begin by replicating results from [REFERENCE], then we extend beyond their work to produce new results in the 2D case, and discuss what is similar and different in the one and two dimensional cases. This also gives us an insight in how to use machine learning as a tool to discover new physics.
+<p align="center">
+  <img src="figures/repo_fig/KZM.png" width="700">
+  <br>
+  <em>The transition of some general disordered model to some crystalline phase. The blue line denotes how long one needs to wait for thermalization. The red lines indicate the cooling rate. The x value at which these two curves intersect is known as the "freezout time" $\hat t$. The classical understanding of KZ mechanism is that dynamics is "frozen out" in the time $t\in [-\hat t , \hat t]$ </em>
+</p>
 
 # Background
 <p align="center">
