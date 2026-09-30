@@ -8,9 +8,60 @@
   <em>2D quench at different quench times, shown at the same rescaled times t/t̂. Larger τ<sub>Q</sub> gives larger domains.</em>
 </p>
 
-1d- verified, from arkiv replication of Zurek(2025)
+Second order phase transitions are caused by the breaking of some symmetry in a physical system. The dynamics that govern a system that is driven through a second order phase transition at some finite speed is known as *Kibble-Zurek physics*. Kibble-Zurek physics predicts that as the system is driven in this non-equilibrium process, the symmetry in a system is broken in different ways across the system. In this repository we explore how one can use machine learning to gain a deeper insight of this non-equilibrium process. 
 
-2d- Still in data preperatoin phase
+We begin by replicating results from [REFERENCE], then we extend beyond their work to produce new results in the 2D case. 
+
+
+# Background
+<p align="center">
+  <img src="SSB.png" width="700">
+  <br>
+  <em>The minimum of the "mexican hat potential" spontaneously takes on a non-zero value as the paramater $\epsilon(t)$ is varied.</em>
+</p>
+Phase transitions in physical systems are associated with a spontaneous symmetry breaking. For instance, consider the figure above. On the left, we see that the minimum of the curve in red is in the center. Now imagine we deform the curve as shown. Suddenly, there are now two minima in the function where previously there was only one. 
+
+Physical systems want to minimize their potential energies in a way that satisfy their kinematical constraints. That's a fancy way of saying that the ball prefers to sit in the minimum of the well. So when there are two degenerate minima, the ball simply has to pick one to fall in. Both divots lower the balls potential energy by the same amount, but *the fact that there is a choice at all for the ball* means the physics of the resulting situation is very different than when we had one minimum. 
+
+The critical point of a system is the point at which symmetry is just about to be broken. At this point, the system becomes ultra-sensitive to thermal (for classical systems) fluctuations. The change in the value of the field at one point has immense influence on the strength of the field at a far away point. To describe this long range sensitivity, we say that the system's *correlation length* "diverges" at the critical point, in other words, we formally say its infinite. 
+
+Correlation length can be thought of as the length of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wati a period of time proportional to the size of the area being considered, in other words, in orderto wait for a thermodynamically large system to equilibriate at the critical point, you'd have to wait an infinite amount of time!
+
+This implies that any finite speed phase transition-- in other words, you drive the system across the critical point in some time that doesn't take an inifnite amount of time-- is inherently a non-equilibrium process. This non-equilibrium behavior comes in the form of heat energy added in by your quench, and is observable in the post-quench field configuration as topological defects that raise the energy of the system above its ground state. 
+
+The density of these topological defects famously follows a power law, $\xi\propto v^k$, where $v$ is the velocity of the quench and $k$ is some real number. Knowing the value of $k$ is very important for physcisists, as one can relate it to the scaling epxonents of a system. In other words, measuring $k$ in this non-equilibrium experiment gives us access to an equilibrium scaling exponent.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 To do:
