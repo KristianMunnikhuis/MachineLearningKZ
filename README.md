@@ -154,3 +154,16 @@ We directly compare the error of the best-blur filter with the fitting results o
   <br>
   <em>We compare the baseline error (blue) to the diffusive filter (orange) and our model (green). We see that the filter plateaus in its ability to predict the dynamics where the model is able to learn to predict the final distribution. At very disordered cases, the model can only learn the filter itself.  </em>
 </p>
+
+
+# Repository Structure
+
+In `/src/` we have functions for generating the $\phi$ field ( `kz.py`, `kz_2d.py`) and for the subsequent analysis (`kz_ml.py`, `analysis.py`). Scripts for generating the fields in large batches suitable for machine learning purposes are found in `/scripts/kz1d/` and `/scripts/kz2d/` respectively. Each folder also has a respective `train.py` for impleneting a RNN or UNET respectively for either the 1D or 2D case. 
+
+We provide a series of interactive Jupyter Notebook files that walk a reader through the experiments, and subsequent training and machine learning results.
+
+# References 
+
+[]
+
+
