@@ -25,11 +25,6 @@ We first replicate the 1D result and show that the predictive information lives 
 
 # Background
 
-<p align="center">
-  <img src="figures/repo_fig/KZM.png" width="700">
-  <br>
-  <em>The transition of some general disordered model to some crystalline phase. The blue line denotes how long one needs to wait for thermalization. The red lines indicate the cooling rate. The x value at which these two curves intersect is known as the "freezout time" $\hat t$. The classical understanding of KZ mechanism is that dynamics is "frozen out" in the time $t\in [-\hat t , \hat t]$ </em>
-</p>
 
 <p align="center">
   <img src="figures/repo_fig/SSB.png" width="700">
@@ -48,13 +43,20 @@ The critical point of a system is the point at which symmetry is just about to b
 
 Correlation length can be thought of as the size of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wait a period of time proportional to $\xi^z$. $z$ is the *dynamical exponent* of the system and is always greater than 0. This means that if our correlation length is infinite, then we need to wait an infinite amount of time for our system to equilibriate! 
 
+<p align="center">
+  <img src="figures/repo_fig/KZM.png" width="700">
+  <br>
+  <em>The transition of some general disordered model to some crystalline phase. The blue line denotes how long one needs to wait for thermalization. The red lines indicate the cooling rate. The x value at which these two curves intersect is known as the "freezout time" $\hat t$. The classical understanding of KZ mechanism is that dynamics is "frozen out" in the time $t\in [-\hat t , \hat t]$ </em>
+</p>
+
+
 This implies that any finite speed phase transition (in other words, you drive the system across the critical point in some time that doesn't take an inifnite amount of time) is inherently a non-equilibrium process. Physically, heat energy is injected into the system by the finite speed quench. This heat is observable in the post-quench field configuration as topological defects that raise the energy of the system above its ground state. 
 
 The density of these topological defects famously follows a power law, $\xi\propto v^{\nu/(1+\nu z)}$, where $v$ is the velocity of the quench. By measuring the correlation length as a function of quench velocity, we can find the value of the exponent $\frac{\nu}{1+\nu z}$. This allow us to get equilibrium scaling exponents out of a non-equilibrium quench experiment!
 
 We study a $\phi^4$ model with the following lagrangian:
 
-$$\mathcal{L}=\frac{1}{2}\dot \phi -\frac{1}{2}(\nabla \phi)^2-V(\phi)$$
+$$\mathcal{L}=\frac{1}{2}\dot \phi^2 -\frac{1}{2}(\nabla \phi)^2-V(\phi)$$
 
 with 
 
@@ -62,7 +64,7 @@ $$V(\phi)=\frac{1}{8}(\phi^4-2\epsilon(t)\phi ^2)
 
 $$
 
-Noise and temperature require an outisde bath, which is modeled through a langevin extension to hte equation sof motion:
+Noise and temperature require an outisde bath, which is modeled through a langevin extension to the equations of motion:
 
 $$\ddot \phi + \eta \dot \phi - \nabla^2 \phi +V'(\phi)=\zeta(r,t)$$
 
@@ -70,19 +72,23 @@ Where $\zeta$ is our noise kernel satisfying:
 
 $$\langle \zeta(r,t) \zeta(r',t') \rangle =2\eta \theta \delta^d(r-r')\delta(t-t')$$
 
-The parameter of interest here is $\epsilon(t)$, which controls whether or not $V(\phi$) has one or two minima (In fact, $V(\phi)$ is exactly the mexican hat potential in the image above!)
+The parameter of interest here is $\epsilon(t)$, which controls whether or not $V(\phi)$ has one or two minima (In fact, $V(\phi)$ is exactly the mexican hat potential in the image above!)
 
 We choose $\epsilon(t)=t/\tau$. We run an experiment from $t=-2\tau \to 10\tau$, which varies $\epsilon$ from -2 to 10 at a constant velocity $v=1/\tau$.
 
-
-This picture is quite general. In this repository we consider the case of one and two dimension seperately. In two dimensions, we can also have coarsening dynamics, where regions of phase set by the kibble zurek dynamics, but then after this formation they can move, shrink, or grow. Oftentimes, anything that goes byeond mean-defect density is considered "beyond KZ physics". In this case, we aim to predict the entire field configuration, which is definitely beyond KZ physics!
+The above schematic of the KZ effect is quite general. In two dimensions, we can also have coarsening dynamics, where regions of phase set by the KZ mechanism, but then after this formation they can move, shrink, or grow. Oftentimes, anything that goes byeond mean-defect density is considered "beyond KZ physics". In this case, we aim to predict the entire field configuration, which is definitely beyond KZ physics!
 
 
 
 # Results
 ### 1D replication study
 
-We aim initially to replicate the results of [REFERENCE]. We simulate the dynamics of the system in one dimenison and train a Recurrent-Neural-Network to take in a snapshot of the field and predict the final field configuration.
+We aim initially to replicate the results of [1]. We simulate the dynamics of the system in one dimenison and train a Recurrent-Neural-Network to take in a time-window of the field and predict the final field configuration.
+
+As a validation of our program, we choose numbers consistent with [1], chiefly that we three $\tau$ values, and our input windows are five snapshots seperated by time units of $\delta t=1$. 
+
+
+The one dimensional field starts off with a mean amplitude of zero, but grows with $\epsilon$. Defects are counted as zero-crossings of the field. It is the frustration energy between positive and negative domains that increases the total energy of the system. 
 
 <p align="center">
   <img src="figures/1d/figure1.png" width="700">
@@ -92,7 +98,7 @@ We aim initially to replicate the results of [REFERENCE]. We simulate the dynami
 
 
 
-You can train the model yourself, using `notebook.01_1d_replication.ipynb`. If you do, you'll find a result similar to this:
+You can train the model yourself, using `notebook.01_1d_replication.ipynb`. In our training, we find the RNN is able to predict the final field strength and values, as well asaccurately predict the location of defects as reporeted first in [1].
 
 
 <p align="center">
@@ -112,25 +118,24 @@ You can train the model yourself, using `notebook.01_1d_replication.ipynb`. If y
   <em>Location of defects versus the prediction by the model</em>
 </p>
 
-In direct comparison with some of the figures in [Reference], we find that we replicate their results to a sufficient level of satisfaction. For instance, observe the training/validation curves we recover to the ones reported by them.
+In direct comparison with many of the figures in [1], we find that we replicate their results to a sufficient level of satisfaction. For instance, observe the training/validation curves we recover to the ones reported by them. We purposely choose numbers that are identical to theirs for validation purposes. 
 
 <p align="center">
-  <img src="figures/1d/final_t_validation_curves.png" width="48%">
-  <img src="figures/repo_fig/Paper_compare.png" width="48%">
+  <img src="figures/1d/final_t_validation_curves.png" width="600">
   <br>
-  <em>Left: Our result Right: [REFERENCE] result.</em>
+  <em>Training (dashed) and validation (solid) loss for different input times t, τ<sub>Q</sub> = 128.
+  Compare with Fig. 4 of Suzuki, Li & Zurek [1].</em>
 </p>
+### Going Beyond the paper
 
-#### Going Beyond the paper
+One simple question that follows from this study: What is the model really learning? 
 
-Before continuing onto the two dimensional case, we first ask (as we will ask throughout this project): What is the model really learning? 
-
-To help answer this question, we apply a low-pass filter to the inputs before asking our model to predict the final field values. KZ physics tells us that length scales less than $\xi_{KZ}$ (and hence, momentum modes larger than $k=\frac{1}{\xi_{KZ}}$) should be irrelevant to the final field configuration.
+To help answer this question, we apply a low-pass filter to the inputs before asking our model to predict the final field values. KZ physics tells us that length scales less than $\hat \xi$ (and hence, momentum modes larger than $k=\frac{1}{\hat \xi}$) should be irrelevant to the final field configuration.
 
 In applying a low pass filter, we are selecting to keep only momentum modes $k\in [0,k_c]$ where $k_c$ is a cutoff frequency.
 
 
-We find that for $k_c\le \frac{1}{\xi_{KZ}}$, validation error greatly increases, but for $k_c\ge\frac{1}{\xi_{KZ}}$ is flat! The RNN is only learning features on the scale of the Kibble-Zurek length!
+We find that for $k_c\le \frac{1}{\hat \xi }$, validation error greatly increases, but for $k_c\ge\frac{1}{\hat \xi}$ is flat! The RNN is only learning features on the scale of the Kibble-Zurek length!
 
 
 <p align="center">
@@ -139,28 +144,71 @@ We find that for $k_c\le \frac{1}{\xi_{KZ}}$, validation error greatly increases
   <em>Validation errors against $k_c$cutoff frequency. </em>
 </p>
 
+
 ## 2D Kibble Zurek Physics
 
 In two dimensions, there are different dynamical constraints at play in the evolution of the system. Now, defects form as two-dimensional areas of like-domain size.
 
-This can be seen in the animation at the top of this page. We now want to ask the same question, where is the information in this quench? Does it change in two dimensions? Do effects like coarsening effect our dynamics? What does our model really end up learning?
+This can be seen in the animation at the top of this page. In our study, we look at systems of size $256 \times 256$ with quench times $\tau_q \in [8,256]$. We generate $2000$ quenches for each valeu of $\tau$ which we believe is sufficient for the model to learn. We train the model to predict the the signs of $\phi$ at $t=10 \hat t$. 
 
-To start, we examine a single image snapshot of the field $\phi$ at a single snapshot in time. We ask ourselves how much of the final field is already held in this image? 
-
-Before using machine learning, it would be nice to establish a baseline of what we can assume about the dynamics from a snapshot. The most mild assumption we can make is that the field diffuses uniformly.
+In two dimensions, defects now are domain walls which can be thought of as the lines seperating the phases. We check that these obey the kibble zurek scaling numerically:
 
 
+<p align="center">
+  <img src="figures/2d/kz_scaling.png" width="700">
+  <br>
+  <em>Kibble zurek scaling of domain wall length in the system. THe fitted slope of 0.28 is in good agreement with the theoretical value of 0.25. </em>
+</p>
 
+
+As a way to quantify the error of a model, we define  "persistance". This is error associated with taking the configuration at a given time and assuming that all sites will keep their current sign to the end of the evolutionn. It is the error that we get assuming nothing else will happen. It forms the upper bound on the error of any predictive model. 
+
+
+
+<p align="center">
+  <img src="figures/2d/persistence_collapse.png" width="700">
+  <br>
+  <em>Persistance has a near-collpase over rescaled time units, indicating the impulse regimes are universal across quench time. </em>
+</p>
+
+Finally, we note that in the study the largest quench times $\tau=128, 256$ are associated with with KZ lengths that are large compared to the system size. We include the results from their quench experiments but note that the bulk of our focus will be on smaller quenches to avoid issues of finite system size. 
+
+## Machine Learning on the 2D model
+
+We deifne a guassian kernel with width $\sigma$:
+
+$$G_\sigma (r) = (2\pi \sigma^2)^{-1} e^(-r/\sigma^2)$$
+
+
+One very crude model of domain formation is through simple diffusion that can be modeled by using the above guassian to blur the field. Surprsingly, such a simple model does well even in incredibly disordered cases. By scanning $\sigma$, we find that the optimal blurring follows $\hat xi$. For more details on this from a fourier perspective, see `02_2d_kz_physics.ipynb`.
+
+After domains have formed, the optimal blurring parameter obeys $\sigma^2=2\Delta t$ whre $\Delta t$ is the time remaining in the quench. This is a result indicative of diffusion dynamics. 
+<p align="center">
+  <img src="figures/2d/blur_vs_curvature_flow.png" width="700">
+  <br>
+  <em>Diffusive dynamics begin domains have already formed. </em>
+</p>
 
 
 <p align="center">
   <img src="figures/2d/blur_widths_demo_tau32.png" width="700">
   <br>
-  <em>A gaussian blur filter can reduce error in even a very disorderd state. </em>
+  <em>Effects of the blurring parameter on field compared to the final domain distribution. A gaussian blur filter can reduce error in even a very disorderd state. </em>
+</p>
+
+### Unet Comparison
+
+<p align="center">
+  <img src="figures/2d/unet_diagram.png" width="700">
+  <br>
+  <em>Schematic of the UNET model employed in this study. </em>
 </p>
 
 
-We directly compare the error of the best-blur filter with the fitting results of our NN. 
+We trained a UNET model on input images at specified timesteps of $\hat t$ to predict the final field domain pattern.
+
+
+We directly compare the error of the best-blur filter with the fitting results of our UNET model. We find, suprisingly, that it appears that the UNET simply learns the optimal guassian blur at early times in the evolution. I.e. that the best model for final defect density at early times is diffusive dynamics. We note that the training of the model only included single snapshot images, and that absent of momentum information diffusive dynamics may be the only physics one can rely on to predict the final field configuration. However it does seem that the model is learning genuinely new physics, as we can see that while the Guassian Blur plateaus in every quench experiment, the UNET is capable of reducing error by an order of magnitude beyond the blur. At late times, the blur once again becomes the optimum physics as with short timescales field dynamics can almost always be approximated through diffusion. 
 
 
 <p align="center">
@@ -169,6 +217,22 @@ We directly compare the error of the best-blur filter with the fitting results o
   <br>
   <em>We compare the baseline error (blue) to the diffusive filter (orange) and our model (green). We see that the filter plateaus in its ability to predict the dynamics where the model is able to learn to predict the final distribution. At very disordered cases, the model can only learn the filter itself.  </em>
 </p>
+
+
+
+
+<p align="center">
+  <img src="figures/2d/blur_vs_unet_outcome_tau32.png
+" width="700">
+  <br>
+  <em>A comparison of the guassian blurring with predictions from the UNET. In the bottom row, areas shaded in black are regions both models got wrong, in green, regions that UNET predicted correctly but the blurring did not, and red the opposite. We see that UNET and guassian blurring are almost identical at early times in preformance and hold no edge over one another, but at intermediate times the UNET is better able to capture the contours of the domain formations than the blurring is.  </em>
+</p>
+
+
+### Impact of momentum
+
+The original study in [1] was preofrmed 
+
 
 
 # Repository Structure
