@@ -17,8 +17,9 @@ from torch.utils.data import TensorDataset, DataLoader
 import src.kz_ml as kzml
 
 # ---- inputs ----
-DATA   = "momentum_exp/data"
-OUTDIR = "momentum_exp/results"
+ETA    = 0.1                                          # must match generate.py
+DATA   = f"momentum_exp/data_eta{ETA:g}"
+OUTDIR = f"momentum_exp/results_eta{ETA:g}"
 EPOCHS, LR, BATCH, SEED = 30, 1e-3, 32, 0
 
 p = argparse.ArgumentParser()

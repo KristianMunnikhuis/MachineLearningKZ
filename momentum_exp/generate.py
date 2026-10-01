@@ -8,7 +8,8 @@ import os
 import argparse
 import numpy as np
 import src.kz_2d as kz2
-
+ETA       = 0.1                                       # damping (1.0 = the original run)
+OUTDIR    = f"momentum_exp/data_eta{ETA:g}"
 # ---- inputs ----
 TAU       = 4
 TIMES     = [0, 0.5, 1, 2, 3,4, 5, 6, 7]   # input times to keep, units of t_hat (multiples of SAVE_HAT)
@@ -23,8 +24,8 @@ p = argparse.ArgumentParser()
 p.add_argument("chunk_id", type=int)
 a = p.parse_args()
 
-kz2.dx, kz2.eta, kz2.theta, kz2.N, kz2.TAU = 0.5, 1.0, 1e-8, N, float(TAU)
-t_hat = np.sqrt(2 * kz2.eta * TAU)
+kz2.dx, kz2.eta, kz2.theta, kz2.N, kz2.TAU = 0.5, ETA, 1e-8, N, float(TAU)
+t_hat = np.sqrt(2 * 1.0 * TAU)                        # time unit fixed at its eta = 1 value, for comparisont_hat = np.sqrt(2 * kz2.eta * TAU)
 
 # time grid: start and end on multiples of SAVE_HAT * t_hat, so saved steps land exactly on them
 save    = SAVE_HAT * t_hat                            # save spacing, physical time
