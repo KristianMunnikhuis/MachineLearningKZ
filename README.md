@@ -124,40 +124,33 @@ We find that for $k_c\le \frac{1}{\xi_{KZ}}$, validation error greatly increases
   <em>Validation errors against $k_c$cutoff frequency. </em>
 </p>
 
+## 2D Kibble Zurek Physics
+
+In two dimensions, there are different dynamical constraints at play in the evolution of the system. Now, defects form as two-dimensional areas of like-domain size.
+
+This can be seen in the animation at the top of this page. We now want to ask the same question, where is the information in this quench? Does it change in two dimensions? Do effects like coarsening effect our dynamics? What does our model really end up learning?
+
+To start, we examine a single image snapshot of the field $\phi$ at a single snapshot in time. We ask ourselves how much of the final field is already held in this image? 
+
+Before using machine learning, it would be nice to establish a baseline of what we can assume about the dynamics from a snapshot. The most mild assumption we can make is that the field diffuses uniformly.
 
 
 
 
 
+<p align="center">
+  <img src="figures/2d/blur_widths_demo_tau32.png" width="700">
+  <br>
+  <em>A gaussian blur filter can reduce error in even a very disorderd state. </em>
+</p>
 
 
+We directly compare the error of the best-blur filter with the fitting results of our NN. 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-To do:
-
-rename files []
-
-comment all files []
-
-Clear figures for 2D, 1D []
-
-README explanation, citations ,etc []
-
-kz.py - 1D phi_4 model code (Originally KZ.py, needs updating)
-
-kz_ml.py - 2D UNET trainer for the 2d phi_4 
-
-KZ_2D.py 
+<p align="center">
+  <img src="figures/2d/unet_vs_blur_vs_persistence.png
+" width="700">
+  <br>
+  <em>We compare the baseline error (blue) to the diffusive filter (orange) and our model (green). We see that the filter plateaus in its ability to predict the dynamics where the model is able to learn to predict the final distribution. At very disordered cases, the model can only learn the filter itself.  </em>
+</p>
