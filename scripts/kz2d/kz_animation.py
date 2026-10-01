@@ -15,7 +15,7 @@ from matplotlib import animation
 import src.kz_2d as kz2
 
 # ---- inputs ----
-TAUS        = [8, 32,64, 128]    # quench times, one panel each
+TAUS        = [4, 16 ,64]    # quench times, one panel each
 N           = 512             # sites per side
 DT          = 0.25            # RK4 step
 T_START_HAT = -1.0            # first frame, in units of t_hat

@@ -25,35 +25,32 @@ We first replicate the 1D result and show that the predictive information lives 
 
 # Background
 
-
-Second order phase transitions are caused by the breaking of some symmetry in a physical system. The dynamics that govern a system that is driven through a second order phase transition at some finite speed is known as *Kibble-Zurek physics*. Kibble-Zurek physics predicts that as the system is driven in this non-equilibrium process, the symmetry in a system is broken in different ways across the system. In this repository we explore how one can use machine learning to gain a deeper insight of this non-equilibrium process. 
-
-Recently work has been done on trying to understand the non-equilibrium dynamics that form these domains. A work led by ____ [REFERENCE] studied the KZ effect in one dimension, finding that deep within the "freezout" regime there exists enough information to intuit the final domain pattern. 
-
-We begin by replicating results from [REFERENCE], then we extend beyond their work to produce new results in the 2D case, and discuss what is similar and different in the one and two dimensional cases. This also gives us an insight in how to use machine learning as a tool to discover new physics.
 <p align="center">
   <img src="figures/repo_fig/KZM.png" width="700">
   <br>
   <em>The transition of some general disordered model to some crystalline phase. The blue line denotes how long one needs to wait for thermalization. The red lines indicate the cooling rate. The x value at which these two curves intersect is known as the "freezout time" $\hat t$. The classical understanding of KZ mechanism is that dynamics is "frozen out" in the time $t\in [-\hat t , \hat t]$ </em>
 </p>
 
-# Background
 <p align="center">
   <img src="figures/repo_fig/SSB.png" width="700">
   <br>
-  <em>The minimum of the "mexican hat potential" spontaneously takes on a non-zero value as the paramater $\epsilon(t)$ is varied.</em>
+  <em>The minima of the double-well potential spontaneously takes on a non-zero value as the paramater $\epsilon(t)$ is varied.</em>
 </p>
 Phase transitions in physical systems are associated with a spontaneous symmetry breaking. For instance, consider the figure above. On the left, we see that the minimum of the curve in red is in the center. Now imagine we deform the curve as shown in the diagram. We see that suddenly, there are now two minima in the function where previously there was only one. 
 
-The red curve represents the potential energy of the ball. Physical systems want to minimize their potential energies in a way that satisfy their kinematical constraints. That's a fancy way of saying that the ball prefers to sit in the minimum of the well. So when there are two degenerate minima, the ball simply has to pick one to fall in. Both divots lower the balls potential energy by the same amount, but *the fact that there is a choice at all for the ball* means the physics of the resulting situation is very different than when we had one minimum. 
+The red curve represents our systems potential energy. Our system is described by a "state", represented by the blue ball. Imagine we place the ball into the curve and let it go. We see in the first picture on the left that there is only one place we can put it so that the ball does not roll, and that is at the minimum of the potential energy curve. A system sitting at the minimum of a potential enjoys stability. This minimum energy state is called the ground state of the system. 
 
-The critical point of a system is the point at which symmetry is just about to be broken. At this point, the system becomes ultra-sensitive to thermal fluctuations (The situation is slightly different in quantum systems, which we do not consider here). The change in the value of the field at one point has immense influence on the strength of the field at a far away point. To describe this long range sensitivity, we say that the system's *correlation length* "diverges" at the critical point, in other words, we formally say its infinite. 
+When there are two degenerate minima, the ball has to pick one to fall in. Both divots lower the balls potential energy by the same amount, so there is priority for which one should be chosen over the other, however a *choice must be made*. While a ball put the left well and a ball put in the right well are going to experience the exact same physics, their configurations are distinguishable (by their $x$ component, for instance). 
 
-Correlation length can be thought of as the size of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wait a period of time proportional to the size of the area being considered. This means that if our correlation length is infinite, then we need to wait an infinite amount of time for our system to equilibriate! 
+If we place the ball at the center of the minimum as in the left case in the figure above, the moment when the potential energy develops two seperate minima the ball must make a choice as to which well it will occupy. This is why we call it spontaneous symmetry breaking, because the symmetry is broken spontaneously! 
+
+The critical point of a system is the point at which symmetry is just about to be broken (e.g. the critical Temperature, critical magnetic field, etc). At this point, the system becomes ultra-sensitive to thermal fluctuations (The situation is slightly different in quantum systems, which we do not consider here). The change in the value of the field at one point has immense influence on the strength of the field at a far away point. To describe this long range sensitivity, we say that the system's *correlation length* "diverges" at the critical point, in other words, we formally say it is infinite. The correlation length of a second order phase transition obeys a scaling law, $\xi \propto \Delta^\nu$, where $\Delta$ is the distance from the critical point and $\nu$ a number greater than 0.
+
+Correlation length can be thought of as the size of an area that has settled into the same value of field strength. However, to equilibriate an area of size $\xi$, one needs to wait a period of time proportional to $\xi^z$. $z$ is the *dynamical exponent* of the system and is always greater than 0. This means that if our correlation length is infinite, then we need to wait an infinite amount of time for our system to equilibriate! 
 
 This implies that any finite speed phase transition (in other words, you drive the system across the critical point in some time that doesn't take an inifnite amount of time) is inherently a non-equilibrium process. Physically, heat energy is injected into the system by the finite speed quench. This heat is observable in the post-quench field configuration as topological defects that raise the energy of the system above its ground state. 
 
-The density of these topological defects famously follows a power law, $\xi\propto v^k$, where $v$ is the velocity of the quench and $k$ is some real number. Knowing the value of $k$ is very important for physcisists, as one can relate it to the scaling epxonents of a system. In other words, measuring $k$ in this non-equilibrium experiment gives us access to an equilibrium scaling exponent.
+The density of these topological defects famously follows a power law, $\xi\propto v^{\nu/(1+\nu z)}$, where $v$ is the velocity of the quench. By measuring the correlation length as a function of quench velocity, we can find the value of the exponent $\frac{\nu}{1+\nu z}$. This allow us to get equilibrium scaling exponents out of a non-equilibrium quench experiment!
 
 We study a $\phi^4$ model with the following lagrangian:
 
@@ -61,7 +58,7 @@ $$\mathcal{L}=\frac{1}{2}\dot \phi -\frac{1}{2}(\nabla \phi)^2-V(\phi)$$
 
 with 
 
-$$V(\phi)=\frac{1}{8}(\phi^4-\epsilon(t)\phi ^2)
+$$V(\phi)=\frac{1}{8}(\phi^4-2\epsilon(t)\phi ^2)
 
 $$
 
@@ -75,7 +72,7 @@ $$\langle \zeta(r,t) \zeta(r',t') \rangle =2\eta \theta \delta^d(r-r')\delta(t-t
 
 The parameter of interest here is $\epsilon(t)$, which controls whether or not $V(\phi$) has one or two minima (In fact, $V(\phi)$ is exactly the mexican hat potential in the image above!)
 
-We choose $\epsilon(t)=t/\tau$, so that if we run an experiment for instance from $t=-3\tau \to 10\tau$ we are varying $\epsilon$ from -3 to 10 at a constant velocity $v=1/\tau$.
+We choose $\epsilon(t)=t/\tau$. We run an experiment from $t=-2\tau \to 10\tau$, which varies $\epsilon$ from -2 to 10 at a constant velocity $v=1/\tau$.
 
 
 This picture is quite general. In this repository we consider the case of one and two dimension seperately. In two dimensions, we can also have coarsening dynamics, where regions of phase set by the kibble zurek dynamics, but then after this formation they can move, shrink, or grow. Oftentimes, anything that goes byeond mean-defect density is considered "beyond KZ physics". In this case, we aim to predict the entire field configuration, which is definitely beyond KZ physics!

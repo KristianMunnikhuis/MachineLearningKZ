@@ -18,7 +18,6 @@ N         = 256
 N_REAL    = 50                           # samples per chunk
 DT        = 0.25                         # target step size (adjusted slightly to fit the save spacing)
 T_END_HAT = 10.0                         # end of run = target time, units of t_hat
-OUTDIR    = "momentum_exp/data"
 
 p = argparse.ArgumentParser()
 p.add_argument("chunk_id", type=int)
