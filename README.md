@@ -3,10 +3,28 @@
 # Neural-Network Prediction of Defect Formation in Quenched $\phi^4$ models.
 
 <p align="center">
-  <img src="figures/2d/kz_quench.gif" width="700">
+  <img src="figures/2d/kz_quench.gif" width="1000">
   <br>
   <em>2D quench at different quench times, shown at the same rescaled times t/t̂. Larger τ<sub>Q</sub> gives larger domains.</em>
 </p>
+
+## Overview
+
+WHen a system is driven through a symmetry-breaking phase transition at a finite rate, the symmetry in the system is not broken uniformly throughout the system but instead forms domains of broken-symmetry states characterized by defects in the system. The Kibble-Zurek (KZ) mechanism predicts the typical size of these domains, but not any other higher order spatial information such as variance, spatial structure, or defect-defect correlations. It was recently shown in a paper by Suzuki, Li, and Zurek [1] in 1D that a recurrent Neural Network can be trained to predict the defect locations from data deep within the impulse regime, long before the configuration forms. This repository studies this question in more detail and investigates the physics that model learns.
+
+
+We first replicate the 1D result and show that the predictive information lives in modes at or greater than the Kibble-Zurek length scale. We then extend the experiment to 2D, where domains do not just form, but also coarsen. We demonstrate that given snapshots of the field configuration, a NN designed with the UNET architecture is able to learn the dominant phyiscs of coarsening at early and late timescales, and at intermediate times in evolution is able to learn physics beyond coarsening, decreasing losses by over 20x the coarsening model. The original study in [1] trained on sequential snapshot data, we study the effect of training on instead the single snapshot field configuration $(\phi,\pi)$ and study the effect of including momentum into training as a function of damping parameter, finding that in overly damped systems knowledge of momentum holds little predictive value.
+
+<p align="center">
+  <img src="figures/2d/summary.png" width="900">
+  <br>
+  <em>(a) From an early, noisy field (t = 3 t̂), the U-Net predicts the domain pattern at the end of the run.
+  (b) Prediction error vs. input time: the U-Net beats both baselines, most around domain formation (dotted line).
+  (c) After formation, the optimal blur width follows the curvature-flow prediction σ² = 2Δt for all quench rates (shaded: before formation).</em>
+</p>
+
+# Background
+
 
 Second order phase transitions are caused by the breaking of some symmetry in a physical system. The dynamics that govern a system that is driven through a second order phase transition at some finite speed is known as *Kibble-Zurek physics*. Kibble-Zurek physics predicts that as the system is driven in this non-equilibrium process, the symmetry in a system is broken in different ways across the system. In this repository we explore how one can use machine learning to gain a deeper insight of this non-equilibrium process. 
 
@@ -164,6 +182,6 @@ We provide a series of interactive Jupyter Notebook files that walk a reader thr
 
 # References 
 
-[]
+1. F. Suzuki, Y. W. Li, and W. H. Zurek, *Machine learning topological defect formation: When are the defects made?*, Phys. Rev. Lett. (accepted), arXiv:2508.20347 (2026).
 
 
