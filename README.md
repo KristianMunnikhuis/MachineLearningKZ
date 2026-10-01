@@ -231,18 +231,156 @@ We directly compare the error of the best-blur filter with the fitting results o
 
 ### Impact of momentum
 
-The original study in [1] was preofrmed 
+The original study in [1] was preformed using a series of snapshot times. This gives the NN access to information about the momentum of the model through finite time differences in the field values. To see the effect of incorporating momentum into the model, we compare the MSE of the times considered in the paper in the 1D case compared to a model trained only on a single image snapshot of the field. 
+
+<p align="center">
+  <img src="figures/1d/window_vs_snapshot.png
+" width="700">
+  <br>
+  <em>Effect of time snapshots on the validation MSE. Including more information on momentum is helpful to a point, but outside of the impulse regime field values correlated very strongly with momentum values and knowledge of momentum no longer helps to reduce MSE.  </em>
+</p>
+
+Seeing this enhancement in performance tied to the impulse regime we investigate the case in 2 dimension, by modifying our UNET to take in a 2 channel input image that now encodes $\phi$ and its conjugate momentum $\pi$. 
 
 
+# Next steps and open questions
+-> Exploration of NN archicture: While UNET is a natural starting place for correlated image data, is it the optimal model? Could more sophisticated models learn deeper physics? Similarily, an analysis of hyper parmater scalings might let us ultimately save on computing resources.
 
-# Repository Structure
+-> Response to non-homogenous quenches:
+What if heat is injected only into some areas of the lattice? Can we train a model to learn the dynamical behavior of these deeply non-equilibrium configurations?
 
-In `/src/` we have functions for generating the $\phi$ field ( `kz.py`, `kz_2d.py`) and for the subsequent analysis (`kz_ml.py`, `analysis.py`). Scripts for generating the fields in large batches suitable for machine learning purposes are found in `/scripts/kz1d/` and `/scripts/kz2d/` respectively. Each folder also has a respective `train.py` for impleneting a RNN or UNET respectively for either the 1D or 2D case. 
+-> More complicated models:
 
-We provide a series of interactive Jupyter Notebook files that walk a reader through the experiments, and subsequent training and machine learning results.
+Models such as the Potts Model exhibit $Z_3$ symmetry breaking, meaning that instead of domains of $1,-1$ they form domains of $1, e^{i\pi/3}, e^{i 2\pi /3}$. Furthermore, these types of models are known to have extensions where the physics is more subtle, for instance slight energy imbalances in the broken symmetry states that give preference to one type of defect over another. A NN ability to learn the dynamics of such a model would give insight into their phase transitions.
 
-# References 
+## Repository Structure
 
-1. F. Suzuki, Y. W. Li, and W. H. Zurek, *Machine learning topological defect formation: When are the defects made?*, Phys. Rev. Lett. (accepted), arXiv:2508.20347 (2026).
+```
+MachineLearningKZ/
+├── src/                      # core library, imported by everything else
+│   ├── kz.py                 # 1D Langevin φ⁴ solver (+ 1D data loading)
+│   ├── kz_2d.py              # 2D Langevin φ⁴ solver and diagnostics
+│   ├── kz_ml.py              # 2D U-Net, data loading, training and evaluation
+│   └── analysis.py           # loading results/models, predictions, wall measures
+│
+├── scripts/                  # command-line programs (run from the repo root with python -m)
+│   ├── kz1d/
+│   │   └── generate_data.py  # 1D quench dataset
+│   └── kz2d/
+│       ├── generate_data.py  # one chunk of 2D quench data
+│       ├── train.py          # train one U-Net (one τ_Q, one input time)
+│       ├── kz_scaling.py     # domain size at formation vs τ_Q
+│       ├── inspect_chunk.py  # quick visual check of a data chunk
+│       └── kz_animation.py   # the animated GIF at the top of this README
+│
+├── jobs/                     # SGE batch scripts for the BU SCC cluster
+│   ├── gen2d.sh              # 2D data generation (array job)
+│   ├── train.sh              # U-Net training (array job, GPU)
+│   └── train_grid_*.txt      # (τ_Q, t, target) combinations for train.sh
+│
+├── notebooks/                # the analysis, in reading order
+│   ├── 01_1d_replication.ipynb
+│   ├── 02_2d_kz_physics.ipynb
+│   └── 03_ml_analysis.ipynb
+│
+├── momentum_exp/             # self-contained experiment: does momentum π help prediction?
+│   ├── generate.py, train.py # data (φ and π) and training (φ vs (φ, π))
+│   ├── gen.sh, train.sh      # cluster jobs
+│   ├── analysis.ipynb        # results
+│   └── results_eta*/         # one folder per damping η
+│
+├── results/
+│   ├── v2/                   # current 2D training results (one JSON per run)
+│   ├── v1/                   # superseded first pass, kept for reference
+│   └── kz_scaling.json       # output of scripts/kz2d/kz_scaling.py
+│
+├── figures/                  # figures used in this README and the notebooks
+└── requirements.txt
+```
 
+Simulation data (`data/`) and trained weights (`*.pt`) are not included; see **Reproducing the results** to regenerate them.
+## Installation
+
+Tested with Python 3.12.
+
+```bash
+git clone https://github.com/KristianMunnikhuis/MachineLearningKZ.git
+cd MachineLearningKZ
+conda create -n mlkz python=3.12
+conda activate mlkz
+pip install -r requirements.txt
+```
+
+All scripts are run **from the repository root** with `python -m`, so that `src/` is importable.
+
+## Reproducing the results
+
+Simulation data and trained model weights are not included in the repository (the 2D dataset is ~34 GB).
+The training *results* (one JSON per run, in `results/`) are included, so the error and training-statistics
+plots in the notebooks can be made without retraining. Everything else needs the steps below.
+
+### 1. 1D data ( ~10 min per τ_Q on M1 Macbook Pro)
+
+```bash
+python -m scripts.kz1d.generate_data 128
+```
+
+Then run `notebooks/01_1d_replication.ipynb`; the 1D networks are trained inside the notebook.
+
+### 2. 2D data (cluster)
+
+Each τ_Q is 40 chunks × 50 quenches = 2000 samples. On an SGE cluster:
+
+```bash
+for tau in 8 16 32 64 128 256; do
+  qsub -v TAU=$tau -N kz2d_$tau jobs/gen2d.sh
+done
+```
+
+One chunk takes ~10 min (τ_Q = 8) to ~2 h (τ_Q = 256). The job script uses the Boston University SCC settings
+(project name, modules); adapt the header lines for other clusters.
+
+### 3. KZ scaling
+
+```bash
+python -m scripts.kz2d.kz_scaling
+```
+
+Writes `results/kz_scaling.json`, used by notebook 02.
+
+### 4. Train the U-Nets (cluster, GPU)
+
+For training the UNET, we use computing resources of the Boston University SCC. One model per (τ_Q, input time) takes about 7 minutes on a GPU.
+
+```bash
+qsub -t 1-48 -v GRID=jobs/train_grid_y_end.txt jobs/train.sh
+qsub -t 1-24 -v GRID=jobs/train_grid_early.txt jobs/train.sh
+```
+
+Writes `results/v2/*.json` (metrics and training history) and `*.pt` (weights).
+
+### 5. Notebooks
+
+Run in order: `02_2d_kz_physics.ipynb`, then `03_ml_analysis.ipynb`. Cells that show individual
+quenches or model predictions need one data chunk per τ_Q (`data/2D_v2/tau<τ>/chunk_000.npz`)
+and the trained weights.
+
+# Contact
+I am a graduate student at Boston University advised by Anatoli Polkovnikov who is interested in statistical analysis and physics modeling. I can be reached by my school email:
+
+Kristian Munnikhuis
+kmunnik@bu.edu
+
+
+I am always interested in connecting and working on interesting projects. Please, reach out!
+
+## References
+
+1. F. Suzuki, Y. W. Li, and W. H. Zurek, *Machine learning topological defect formation: When are the defects made?*,
+   [arXiv:2508.20347](https://arxiv.org/abs/2508.20347) (2025; v2 2026). Accepted in Phys. Rev. Lett.
+2. T. W. B. Kibble, *Topology of cosmic domains and strings*, J. Phys. A: Math. Gen. **9**, 1387 (1976).
+3. W. H. Zurek, *Cosmological experiments in superfluid helium?*, Nature **317**, 505 (1985).
+4. W. H. Zurek, *Cosmological experiments in condensed matter systems*, Phys. Rep. **276**, 177 (1996).
+5. A. del Campo and W. H. Zurek, *Universality of phase transition dynamics: Topological defects from symmetry breaking*,
+   Int. J. Mod. Phys. A **29**, 1430018 (2014).
 
