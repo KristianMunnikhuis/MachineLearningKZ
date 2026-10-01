@@ -16,3 +16,4 @@ logs/
 log.MD.old_figures/
 .virtual_documents/
 notebooks/04_ml_with_momentum.ipynb
+.old_figures/
