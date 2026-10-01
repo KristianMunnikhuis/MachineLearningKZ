@@ -15,7 +15,7 @@
 # Task k -> time TIMES[k / 2], channels phi (k even) or phi_pi (k odd).
 # -t must be 1 to 2 x (number of TIMES).
 # Submit from the repo root:  qsub momentum_exp/train.sh
-TIMES=(0 0.5 1 2 4 5 6 7)          # must match TIMES in momentum_exp/generate.py
+TIMES=(0 0.5 1 2 3 4 5 6 7)          # must match TIMES in momentum_exp/generate.py
 CHANNELS=(phi phi_pi)
 
 i=$((SGE_TASK_ID - 1))
