@@ -236,9 +236,8 @@ We directly compare the error of the best-blur filter with the fitting results o
 
 The input state configuration $\phi$ in the experiments above neglects the full phase-space coordinate of the field by ignoring the field momentum $\pi$. It is natural to assume that the inclusion of more information, in this case the velocities of the fields through the phase transition, should correspond to a model that is capable of learning more. However, in overdamped systems momentum is suppressed quickly and over long timescales the end state of the system has very little memory of early momenta. To explore the role that momenta plays, we ran the same experiment for a case of $\tau=4$ for three values of $\eta$, the damping parameter. 
 
-Then, we trained the UNET on the full state phase configuration $(\phi,\pi)$
+We trained the UNET on the full state phase configuration $(\phi,\pi)$ and compared the results, which are plotted below. We see a modest increase at earlier times that grows as the damping parameter is decreased, indicating that in systems with higher damping the final configuration is primarily a function only of a snapshot of the system.  At later times, after the impulse regime, the phase configurations are quite fixed and knowledge of the (relatively small) momenta are not useful.
 
-[Setup: same U-Net, 1 channel (φ) vs 2 channels (φ, π); τ_Q = 4; η = 1, 0.3, 0.1; code in `momentum_exp/`]
 
 <p align="center">
   <img src="momentum_exp/error_phi_vs_phipi.png" width="900">
@@ -246,13 +245,9 @@ Then, we trained the UNET on the full state phase configuration $(\phi,\pi)$
   <em>Test error vs input time: persistence, U-Net on φ, U-Net on (φ, π).</em>
 </p>
 
-[Result: π helps early (12–20% at η = 1, 30–36% at η = 0.1), nothing after ~2–3 t̂]
+Below we plot a comparison of the correlation between the fields and the relative error reduction gained by including momentum in training. As the fields become increasingly correlated, the amount of new information momentum gives to the system decreases. 
 
-$$
-\pi(t) = \int^{t} e^{-\eta(t-s)}\left[\nabla^2\phi - V'(\phi) + \zeta\right] ds
-$$
 
-[Why: early π = noise not yet in φ; later π locks onto growing mode, π ≈ γφ]
 
 <p align="center">
   <img src="momentum_exp/momentum_vs_correlation.png" width="900">
@@ -260,9 +255,9 @@ $$
   <em>Error reduction from π vs 1 − corr(π, φ), per damping value.</em>
 </p>
 
-[Damping: lower η → larger gain (longer memory), ends sooner (faster growth)]
 
-### 1D cross-check
+
+### Examining the 1D case with momentum
 
 <p align="center">
   <img src="figures/1d/window_vs_snapshot_normalized.png" width="900">
@@ -270,9 +265,10 @@ $$
   <em>1D: 11-snapshot window vs single snapshot (normalized inputs).</em>
 </p>
 
-[Same picture: 25–40% gain, ends ~2.5 t̂, matches 2D at η = 1. Note: normalization matters]
+Going back to the one dimensional case studied in [1], we observe a similar behavior in the error from considering multiple snapshots (as they did in their study) compared to a single snapshot. We see that again, while momentum grants moderate reduction in error in the impulse regime, afterwards the field configurations are fixed and there is not much to be gained through additional training.
 
-[Caveats: one seed per point; τ_Q = 4 lattice-limited]
+
+
 
 
 
