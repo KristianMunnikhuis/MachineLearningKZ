@@ -229,24 +229,14 @@ We directly compare the error of the best-blur filter with the fitting results o
 </p>
 
 
-### Impact of momentum
-
-The original study in [1] was preformed using a series of snapshot times. This gives the NN access to information about the momentum of the model through finite time differences in the field values. To see the effect of incorporating momentum into the model, we compare the MSE of the times considered in the paper in the 1D case compared to a model trained only on a single image snapshot of the field. 
-
-<p align="center">
-  <img src="figures/1d/window_vs_snapshot.png
-" width="700">
-  <br>
-  <em>Effect of time snapshots on the validation MSE. Including more information on momentum is helpful to a point, but outside of the impulse regime field values correlated very strongly with momentum values and knowledge of momentum no longer helps to reduce MSE.  </em>
-</p>
-
-Seeing this enhancement in performance tied to the impulse regime we investigate the case in 2 dimension, by modifying our UNET to take in a 2 channel input image that now encodes $\phi$ and its conjugate momentum $\pi$. 
 
 
 
-## Momentum
+## Impact of  Momentum
 
-[Question: a snapshot φ isn't the full state (φ, π). Does adding π help?]
+The input state configuration $\phi$ in the experiments above neglects the full phase-space coordinate of the field by ignoring the field momentum $\pi$. It is natural to assume that the inclusion of more information, in this case the velocities of the fields through the phase transition, should correspond to a model that is capable of learning more. However, in overdamped systems momentum is suppressed quickly and over long timescales the end state of the system has very little memory of early momenta. To explore the role that momenta plays, we ran the same experiment for a case of $\tau=4$ for three values of $\eta$, the damping parameter. 
+
+Then, we trained the UNET on the full state phase configuration $(\phi,\pi)$
 
 [Setup: same U-Net, 1 channel (φ) vs 2 channels (φ, π); τ_Q = 4; η = 1, 0.3, 0.1; code in `momentum_exp/`]
 
