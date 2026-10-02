@@ -243,6 +243,51 @@ The original study in [1] was preformed using a series of snapshot times. This g
 Seeing this enhancement in performance tied to the impulse regime we investigate the case in 2 dimension, by modifying our UNET to take in a 2 channel input image that now encodes $\phi$ and its conjugate momentum $\pi$. 
 
 
+
+## Momentum
+
+[Question: a snapshot φ isn't the full state (φ, π). Does adding π help?]
+
+[Setup: same U-Net, 1 channel (φ) vs 2 channels (φ, π); τ_Q = 4; η = 1, 0.3, 0.1; code in `momentum_exp/`]
+
+<p align="center">
+  <img src="momentum_exp/error_phi_vs_phipi.png" width="900">
+  <br>
+  <em>Test error vs input time: persistence, U-Net on φ, U-Net on (φ, π).</em>
+</p>
+
+[Result: π helps early (12–20% at η = 1, 30–36% at η = 0.1), nothing after ~2–3 t̂]
+
+$$
+\pi(t) = \int^{t} e^{-\eta(t-s)}\left[\nabla^2\phi - V'(\phi) + \zeta\right] ds
+$$
+
+[Why: early π = noise not yet in φ; later π locks onto growing mode, π ≈ γφ]
+
+<p align="center">
+  <img src="momentum_exp/momentum_vs_correlation.png" width="900">
+  <br>
+  <em>Error reduction from π vs 1 − corr(π, φ), per damping value.</em>
+</p>
+
+[Damping: lower η → larger gain (longer memory), ends sooner (faster growth)]
+
+### 1D cross-check
+
+<p align="center">
+  <img src="figures/1d/window_vs_snapshot_normalized.png" width="900">
+  <br>
+  <em>1D: 11-snapshot window vs single snapshot (normalized inputs).</em>
+</p>
+
+[Same picture: 25–40% gain, ends ~2.5 t̂, matches 2D at η = 1. Note: normalization matters]
+
+[Caveats: one seed per point; τ_Q = 4 lattice-limited]
+
+
+
+
+
 # Next steps and open questions
 -> Exploration of NN archicture: While UNET is a natural starting place for correlated image data, is it the optimal model? Could more sophisticated models learn deeper physics? Similarily, an analysis of hyper parmater scalings might let us ultimately save on computing resources.
 
