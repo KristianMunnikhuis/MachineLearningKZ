@@ -212,8 +212,7 @@ We directly compare the error of the best-blur filter with the fitting results o
 
 
 <p align="center">
-  <img src="figures/2d/unet_vs_blur_vs_persistence.png
-" width="700">
+  <img src="figures/2d/unet_vs_blur_vs_persistence.png" width="700">
   <br>
   <em>We compare the baseline error (blue) to the diffusive filter (orange) and our model (green). We see that the filter plateaus in its ability to predict the dynamics where the model is able to learn to predict the final distribution. At very disordered cases, the model can only learn the filter itself.  </em>
 </p>
@@ -222,8 +221,7 @@ We directly compare the error of the best-blur filter with the fitting results o
 
 
 <p align="center">
-  <img src="figures/2d/blur_vs_unet_outcome_tau32.png
-" width="700">
+  <img src="figures/2d/blur_vs_unet_outcome_tau32.png" width="700">
   <br>
   <em>A comparison of the guassian blurring with predictions from the UNET. In the bottom row, areas shaded in black are regions both models got wrong, in green, regions that UNET predicted correctly but the blurring did not, and red the opposite. We see that UNET and guassian blurring are almost identical at early times in preformance and hold no edge over one another, but at intermediate times the UNET is better able to capture the contours of the domain formations than the blurring is.  </em>
 </p>
