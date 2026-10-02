@@ -236,9 +236,9 @@ We trained the U-Net on the full state phase configuration $(\phi,\pi)$ and comp
 
 
 <p align="center">
-  <img src="momentum_exp/error_phi_vs_phipi.png" width="900">
+  <img src="figures/momentum/error_phi_vs_phipi.png" width="900">
   <br>
-  <em>Test error vs input time: persistence, U-Net on φ, U-Net on (φ, π).</em>
+<em>Test error vs input time: persistence, U-Net on φ, U-Net on (φ, π), and U-Net on π alone.</em>
 </p>
 
 Below we plot a comparison of the correlation between the fields and the relative error reduction gained by including momentum in training. As the fields become increasingly correlated, the amount of new information momentum gives to the system decreases. 
@@ -246,12 +246,13 @@ Below we plot a comparison of the correlation between the fields and the relativ
 
 
 <p align="center">
-  <img src="momentum_exp/momentum_vs_correlation.png" width="900">
+  <img src="figures/momentum/momentum_vs_correlation.png" width="900">
   <br>
   <em>Error reduction from π vs 1 − corr(π, φ), per damping value.</em>
 </p>
 
 
+We also trained the model purely on the $\pi$ field, and found similar results to training only on the $\phi$ component. This indicates that even in stuations where the momentum and field are uncorrelated, they can still predict the same KZ physics.
 
 ### Examining the 1D case with momentum
 

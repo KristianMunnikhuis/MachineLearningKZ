@@ -9,10 +9,10 @@
 #$ -cwd
 
 # Momentum experiment data: 40 chunks x 50 samples. Damping passed in:
-#   qsub -v ETA=0.3 -N mom_gen_0.3 momentum_exp/gen.sh
+#   qsub -v ETA=0.3 -N mom_gen_0.3 jobs/momentum_gen.sh
 
 module load miniconda
 conda activate kz
 export OMP_NUM_THREADS=1
 
-python -u -m momentum_exp.generate $((SGE_TASK_ID - 1)) --eta $ETA
+python -u -m scripts.momentum.generate $((SGE_TASK_ID - 1)) --eta $ETA

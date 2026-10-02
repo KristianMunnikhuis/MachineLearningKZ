@@ -24,9 +24,8 @@ p.add_argument("--channels", type=str,   required=True, choices=["phi", "phi_pi"
 p.add_argument("--eta",      type=float, default=1.0, help="damping (selects the data folder)")
 a = p.parse_args()
 
-DATA   = f"momentum_exp/data_eta{a.eta:g}"
-OUTDIR = f"momentum_exp/results_eta{a.eta:g}"
-
+DATA   = f"data/momentum/eta{a.eta:g}"
+OUTDIR = f"results/momentum/eta{a.eta:g}"
 # ---- load the chosen time from every chunk ----
 files = sorted(glob.glob(os.path.join(DATA, "chunk_*.npz")))
 i = int(np.argmin(np.abs(np.load(files[0])["times"] - a.t)))

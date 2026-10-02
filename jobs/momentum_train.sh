@@ -10,8 +10,8 @@
 #$ -o logs/
 #$ -cwd
 
-# For each input time: the old U-Net (phi) and the 2-channel U-Net (phi_pi). Damping passed in:
-#   qsub -v ETA=0.3 -N mom_train_0.3 -hold_jid mom_gen_0.3 momentum_exp/train.sh
+# For each input time: the U-Net on phi and the 2-channel U-Net on (phi, pi). Damping passed in:
+#   qsub -v ETA=0.3 -N mom_train_0.3 -hold_jid mom_gen_0.3 jobs/momentum_train.sh
 # -t must be 1 to 2 x (number of TIMES).
 
 TIMES=(0 0.5 1 2 3 4 5 6)
@@ -21,12 +21,12 @@ i=$((SGE_TASK_ID - 1))
 T=${TIMES[$((i / 2))]}
 CH=${CHANNELS[$((i % 2))]}
 
-if [ -f "momentum_exp/results_eta${ETA}/t${T}_${CH}.json" ]; then
+if [ -f "results/momentum/eta${ETA}/t${T}_${CH}.json" ]; then
   echo "already done: eta=$ETA t=$T $CH"; exit 0
 fi
 
 module load miniconda
 conda activate kz
 echo "start: $(date)   eta=$ETA  t=$T  channels=$CH"
-python -u -m momentum_exp.train --t $T --channels $CH --eta $ETA
+python -u -m scripts.momentum.train --t $T --channels $CH --eta $ETA
 echo "end:   $(date)"

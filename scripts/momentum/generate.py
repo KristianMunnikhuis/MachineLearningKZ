@@ -24,8 +24,7 @@ p.add_argument("--eta", type=float, default=1.0, help="damping")
 a = p.parse_args()
 
 ETA    = a.eta
-OUTDIR = f"momentum_exp/data_eta{ETA:g}"
-
+OUTDIR = f"data/momentum/eta{ETA:g}"
 kz2.dx, kz2.eta, kz2.theta, kz2.N, kz2.TAU = 0.5, ETA, 1e-8, N, float(TAU)
 t_hat = np.sqrt(2 * 1.0 * TAU)             # time unit fixed at its eta = 1 value, for comparison across eta
 
