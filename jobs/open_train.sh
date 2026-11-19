@@ -16,7 +16,7 @@ module load miniconda
 conda activate kz
 
 export OMP_NUM_THREADS=$NSLOTS
-export KERAS_BACKEND=${KERAS_BACKEND:-tensorflow}     # use torch if tensorflow is not in the env
+export KERAS_BACKEND=${KERAS_BACKEND:-torch}         # torch already works in the kz env; set tensorflow to override
 GRID=${GRID:-jobs/open_train_grid.txt}
 read CASE TAU T <<< "$(sed -n "${SGE_TASK_ID}p" $GRID)"
 

@@ -11,7 +11,7 @@ Example usage (from the repo root):
 Output: results/open/{case}_tau{TAU}_t{t}.json
 """
 import os
-os.environ.setdefault("KERAS_BACKEND", "tensorflow")    # set KERAS_BACKEND=torch if tensorflow is missing
+os.environ.setdefault("KERAS_BACKEND", "torch")         # set KERAS_BACKEND=tensorflow to override
 import argparse, glob, json, time
 import numpy as np
 import keras
