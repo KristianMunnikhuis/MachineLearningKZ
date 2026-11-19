@@ -20,6 +20,15 @@ RUNS=(
   "qlv_wigner_eta0.1     qlangevin --init wigner --eta 0.1"
   "qlv_wigner_eta0.3     qlangevin --init wigner --eta 0.3"
   "qlv_wigner_eta1       qlangevin --init wigner --eta 1"
+  "qlv_wigner_eta0.003   qlangevin --init wigner --eta 0.003"
+  # bath temperature: does the quantum lag vanish above T* ~ hbar/(2 t_hat) ~ 7e-10?
+  "qlangevin_T1e-11      qlangevin --T_bath 1e-11"
+  "qlangevin_T1e-10      qlangevin --T_bath 1e-10"
+  "qlangevin_T1e-9       qlangevin --T_bath 1e-9"
+  "qlangevin_T1e-8       qlangevin --T_bath 1e-8"
+  # cutoff: the lag should not depend on Omega_c
+  "qlangevin_wc2         qlangevin --omega_c 2"
+  "qlangevin_wc8         qlangevin --omega_c 8"
 )
 TAUS="128"
 N_CHUNKS=10
