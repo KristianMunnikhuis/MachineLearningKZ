@@ -8,11 +8,17 @@ Only the environment changes:
                 S(w) = eta hbar w coth(hbar w / 2T) / (1 + w^2/Omega_c^2),          phi = pi = 0 at t_i
     twa       : phi_tt - phi_xx + V' = 0 (closed),  Wigner vacuum at eps_i
 
+--init sets the initial state of classical/qlangevin: zero (phi = pi = 0, default) or wigner
+(the TWA vacuum). twa always starts from the Wigner vacuum. --tag names the output folder
+(default: the case name), so parameter scans do not collide.
+
 Example usage (from the repo root):
     python -m scripts.kz1d.generate_open twa 128 0          # case, tau, chunk index
     python -m scripts.kz1d.generate_open qlangevin 128 3 --n_chunks 10
+    python -m scripts.kz1d.generate_open classical 128 0 --theta 1e-9 --tag classical_theta1e-9
+    python -m scripts.kz1d.generate_open qlangevin 128 0 --eta 0.1 --init wigner --tag qlv_wigner_eta0.1
 
-Output: data/1D_open/{case}/tau{TAU}/chunk_{chunk:03d}.npz
+Output: data/1D_open/{tag}/tau{TAU}/chunk_{chunk:03d}.npz
     phi_hist  (n, n_snap, DOF) float32   snapshots at t = ts
     ts        (n_snap,)                  snapshot times
     phi_final (n, DOF)        float32    t = TAU (eps = 1)
@@ -38,6 +44,7 @@ THETA     = 1e-8                 # Suzuki temperature (classical)
 HBAR      = 2*THETA/np.sqrt(-kz.EPS_I/2)   # matches the k=0 thermal seed, ~2.31e-8 (qlangevin, twa)
 T_BATH    = 0.0                  # qlangevin bath temperature (0 = pure zero-point noise)
 OMEGA_C   = 4.0                  # qlangevin Drude cutoff
+INIT      = "zero"               # classical/qlangevin initial state: zero or wigner
 BATCH     = {"classical": 100, "qlangevin": 10, "twa": 100}
 SEED0     = 990304
 OUTDIR    = "data/1D_open"
@@ -76,15 +83,21 @@ def generate(case, TAU, chunk, a):
     for b0 in range(0, n_per, batch):
         nb = min(batch, n_per - b0)
 
+        # initial state: Wigner vacuum for twa, or for classical/qlangevin with --init wigner
+        if case == "twa" or a.init == "wigner":
+            phi0 = np.real(np.fft.ifft(a_phi*np.fft.fft(rng.standard_normal((nb, kz.DOF)), axis=1), axis=1))
+            pi0  = np.real(np.fft.ifft(a_pi *np.fft.fft(rng.standard_normal((nb, kz.DOF)), axis=1), axis=1))
+        else:
+            phi0, pi0 = np.zeros((nb, kz.DOF)), np.zeros((nb, kz.DOF))
+
         if case == "classical":
             kz.eta, kz.theta = a.eta, a.theta
-            ph, _ = kz.run(t_hist, dt_actual, n_real=nb, seed=int(rng.integers(2**31)), stride=stride)
+            ph, _ = kz.run(t_hist, dt_actual, n_real=nb, seed=int(rng.integers(2**31)), stride=stride,
+                           phi0=phi0, pi0=pi0)
             phi_hist[b0:b0+nb] = np.transpose(ph, (1, 0, 2))
 
         elif case == "twa":
             kz.eta, kz.theta = 0.0, 0.0
-            phi0 = np.real(np.fft.ifft(a_phi*np.fft.fft(rng.standard_normal((nb, kz.DOF)), axis=1), axis=1))
-            pi0  = np.real(np.fft.ifft(a_pi *np.fft.fft(rng.standard_normal((nb, kz.DOF)), axis=1), axis=1))
             ph, _ = kz.run(t_hist, dt_actual, n_real=nb, stride=stride, phi0=phi0, pi0=pi0)
             phi_hist[b0:b0+nb] = np.transpose(ph, (1, 0, 2))
 
@@ -92,7 +105,7 @@ def generate(case, TAU, chunk, a):
             kz.eta, kz.theta = a.eta, 0.0        # noise added by hand below
             zeta = np.fft.irfft(filt*np.fft.rfft(rng.standard_normal((n_steps, nb, kz.DOF)), axis=0),
                                 n=n_steps, axis=0)
-            phi, pi = np.zeros((nb, kz.DOF)), np.zeros((nb, kz.DOF))
+            phi, pi = phi0.copy(), pi0.copy()
             phi_hist[b0:b0+nb, 0] = phi
             j = 1
             for n, t in enumerate(t_hist[:-1]):
@@ -104,19 +117,20 @@ def generate(case, TAU, chunk, a):
             del zeta
 
         el = time.time() - t0_wall
-        print(f"  [{case} tau={TAU} chunk={chunk}] {b0+nb}/{n_per}  ({el:.0f}s)", flush=True)
+        print(f"  [{a.tag or case} tau={TAU} chunk={chunk}] {b0+nb}/{n_per}  ({el:.0f}s)", flush=True)
 
     phi_final = phi_hist[:, -1, :]
     n_def = kz.count_defects(phi_final.astype(np.float64))
-    outdir = os.path.join(a.outdir, case, f"tau{int(TAU)}")
+    tag    = a.tag or case
+    outdir = os.path.join(a.outdir, tag, f"tau{int(TAU)}")
     os.makedirs(outdir, exist_ok=True)
     path = os.path.join(outdir, f"chunk_{chunk:03d}.npz")
     np.savez(path, phi_hist=phi_hist, ts=ts, phi_final=phi_final, n_defects=n_def,
-             case=case, TAU=TAU, dt=dt_actual, dx=kz.dx, DOF=kz.DOF, eta=kz.eta,
+             case=case, tag=tag, init=("wigner" if case == "twa" else a.init), TAU=TAU, dt=dt_actual, dx=kz.dx, DOF=kz.DOF, eta=kz.eta,
              theta=a.theta if case == "classical" else 0.0,
              hbar=a.hbar if case != "classical" else 0.0,
              T_bath=a.T_bath, omega_c=a.omega_c, seed0=a.seed0, chunk=chunk)
-    print(f"{case} tau={TAU} chunk={chunk}: defects mean={n_def.mean():.1f} sd={n_def.std():.1f}  "
+    print(f"{tag} tau={TAU} chunk={chunk}: defects mean={n_def.mean():.1f} sd={n_def.std():.1f}  "
           f"({time.time() - t0_wall:.0f}s) -> {path}", flush=True)
 
 
@@ -133,6 +147,8 @@ if __name__ == "__main__":
     p.add_argument("--hbar", type=float, default=HBAR)
     p.add_argument("--T_bath", type=float, default=T_BATH)
     p.add_argument("--omega_c", type=float, default=OMEGA_C)
+    p.add_argument("--init", choices=["zero", "wigner"], default=INIT)
+    p.add_argument("--tag", default=None)
     p.add_argument("--seed0", type=int, default=SEED0)
     p.add_argument("--outdir", default=OUTDIR)
     a = p.parse_args()
